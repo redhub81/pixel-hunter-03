@@ -1,7 +1,7 @@
 # Личный проект «Пиксель хантер» [![Build status][travis-image]][travis-url]
 
 * Студент: [Андрей Краснов](https://up.htmlacademy.ru/ecmascript/3/user/176615).
-* Наставник: `Неизвестно`.
+* Наставник: [Николай Яшин](https://up.htmlacademy.ru/ecmascript/3/user/213763).
 
 ---
 
