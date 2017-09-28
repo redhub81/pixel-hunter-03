@@ -40,28 +40,42 @@ window.main = (function () {
     });
   }());
 
-  /* Отображение экранов.
-   ******************************************************************************/
-
+  /**
+   * Отображает заданный экран.
+   * @param {number} screenNumber - Номер экрана.
+   */
   const showScreen = function (screenNumber) {
     const contentTemplate = templates[screenNumber].cloneNode(true);
     mainContent.innerHTML = ``;
     mainContent.appendChild(contentTemplate);
   };
 
-  /* Управление переключением экранов.
+  /* Переключение экранов.
    ******************************************************************************/
 
   let currentScreenNumber = SCREEN_NUMBER.unknown;
 
+  /**
+   * Возвращает номер предыдущего экрана.
+   * @return {number} - Номер предыдущего экрана.
+   */
   const getPreviousScreenNumber = function () {
     return Math.max(0, currentScreenNumber - 1);
   };
 
+  /**
+   * Возвращает номер следующего экрана.
+   * @return {number} - Номер следующего экрана.
+   */
   const getNextScreenNumber = function () {
     return Math.min(templates.length - 1, currentScreenNumber + 1);
   };
 
+  /**
+   * Устанавливает текущий номер экрана.
+   * @param {number} value - Устанавливаемый номер экрана.
+   * @param {functiuon} callBack - Функция обратного вызова. Вызывается в случае обновления номера экрана.
+   */
   const setCurrentScreenNumber = function (value, callBack) {
     if (currentScreenNumber !== value) {
       currentScreenNumber = value;
@@ -69,6 +83,10 @@ window.main = (function () {
     }
   };
 
+  /**
+   * Изменяет отображаемый экран.
+   * @param {number} screenNumber - Номер экрана.
+   */
   const changeScreen = function (screenNumber) {
     setCurrentScreenNumber(screenNumber, (value) => {
       showScreen(value);
@@ -78,23 +96,36 @@ window.main = (function () {
   /* Стратегия обработки событий клавиатуры.
    ******************************************************************************/
 
+  /**
+   * Создает идентификатор клавиатурного действия.
+   * @param {number} keyCode - Код клавиши.
+   * @param {boolean} altKey - Признак нажатия Alt.
+   * @return {string} - Идентификатор клавиатурного действия.
+   */
   const createKeyboardActionID = function (keyCode, altKey) {
     const altCode = altKey ? `ALT` : ``;
     return `KEY-${keyCode}_${altCode}`;
   };
 
+  /**
+   * Сопоставляет действиям их идентификаторы.
+   * @type {object}
+   */
   const keyboardActionStrategy = {
-    [`${createKeyboardActionID(KEY_CODE.leftArrow, true)}`]: () => {
+    [createKeyboardActionID(KEY_CODE.leftArrow, true)]: () => {
       changeScreen(getPreviousScreenNumber());
     },
-    [`${createKeyboardActionID(KEY_CODE.rightArrow, true)}`]: () => {
+    [createKeyboardActionID(KEY_CODE.rightArrow, true)]: () => {
       changeScreen(getNextScreenNumber());
     },
   };
 
-  /* Подписка на события DOM.
+  /* Обработка событий DOM.
    ******************************************************************************/
 
+  /**
+   * Выполняет подписку на события.
+   */
   const subscribe = function () {
     document.addEventListener(`keydown`, function (evt) {
       const keyboardActionID = createKeyboardActionID(evt.keyCode, evt.altKey);
