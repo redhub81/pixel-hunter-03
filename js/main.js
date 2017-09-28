@@ -75,17 +75,31 @@ window.main = (function () {
     });
   };
 
+  /* Стратегия обработки событий клавиатуры.
+   ******************************************************************************/
+
+  const createKeyboardActionID = function (keyCode, altKey) {
+    const altCode = altKey ? `ALT` : ``;
+    return `KEY-${keyCode}_${altCode}`;
+  };
+
+  const keyboardActionStrategy = {
+    [`${createKeyboardActionID(KEY_CODE.leftArrow, true)}`]: () => {
+      changeScreen(getPreviousScreenNumber());
+    },
+    [`${createKeyboardActionID(KEY_CODE.rightArrow, true)}`]: () => {
+      changeScreen(getNextScreenNumber());
+    },
+  };
+
   /* Подписка на события DOM.
    ******************************************************************************/
 
   const subscribe = function () {
     document.addEventListener(`keydown`, function (evt) {
-      if (evt.altKey && evt.keyCode === KEY_CODE.leftArrow) {
-        changeScreen(getPreviousScreenNumber());
-      }
-      if (evt.altKey && evt.keyCode === KEY_CODE.rightArrow) {
-        changeScreen(getNextScreenNumber());
-      }
+      const keyboardActionID = createKeyboardActionID(evt.keyCode, evt.altKey);
+      const keyboardAction = keyboardActionStrategy[keyboardActionID] || (() => {});
+      keyboardAction();
     });
   };
 
