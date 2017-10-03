@@ -1,8 +1,7 @@
 /** @module screens/stats */
 
 import contentBuilder from '../content-builder.js';
-import contentPresenter from '../content-presenter.js';
-import intro from './intro.js';
+import transition from '../transition.js';
 
 const screenTemplate = `\
   <header class="header">
@@ -124,18 +123,6 @@ const screenTemplate = `\
     </div>
   </footer>`;
 
-/**
- * Выполняет подписку на события.
- * @param {object} contentElement - Содержимое игрового экрана.
- */
-const subscribe = (contentElement) => {
-  const backElement = contentElement.querySelector(`.back`);
-
-  backElement.addEventListener(`click`, function () {
-    contentPresenter.show(intro);
-  });
-};
-
 /* Экспорт интерфейса модуля.
  *************************************************************************************************/
 
@@ -147,7 +134,8 @@ export default {
    */
   getContent: () => {
     const contentElement = contentBuilder.build(screenTemplate);
-    subscribe(contentElement);
+
+    transition.addBackToIntro(contentElement);
 
     return contentElement;
   }

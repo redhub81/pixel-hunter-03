@@ -2,10 +2,8 @@
 
 import contentBuilder from '../content-builder.js';
 import contentPresenter from '../content-presenter.js';
-import intro from './intro.js';
 import stats from './stats.js';
-
-const HTML_IMG_TAG_NAME = `img`;
+import transition from '../transition.js';
 
 const screenTemplate = `\
   <header class="header">
@@ -62,20 +60,46 @@ const screenTemplate = `\
   </footer>`;
 
 /**
+ * Ищет родительский элемент удовлетворяющий условию.
+ * @param {object} startChild - Начальный элемент.
+ * @param {object} lastParent - Конечный элемент.
+ * @param {function} predicate - Предикат, определяющий условие поиска.
+ * @return {object} - Найденный удовлетворяющий условию объект, иначе null.
+ */
+const findParent = function (startChild, lastParent, predicate) {
+  let element = startChild;
+  while (element && element !== lastParent) {
+    if (predicate(element)) {
+      return element;
+    }
+    element = element.parentElement;
+  }
+  return null;
+};
+
+/**
  * Выполняет подписку на события.
  * @param {object} contentElement - Содержимое игрового экрана.
  */
 const subscribe = (contentElement) => {
-  const backElement = contentElement.querySelector(`.back`);
   const gameContentElement = contentElement.querySelector(`.game__content`);
+  let mousedownOptionElement;
 
-  backElement.addEventListener(`click`, function () {
-    contentPresenter.show(intro);
+  const findParentGameOption = (startChild, lastParent) => findParent(startChild, lastParent, (element) =>
+    element.classList.contains(`game__option`));
+
+  gameContentElement.addEventListener(`mousedown`, (evt) => {
+    mousedownOptionElement = findParentGameOption(evt.target, gameContentElement);
+    const onDocumentMouseupHandler = () => {
+      document.removeEventListener(`mouseup`, onDocumentMouseupHandler);
+      mousedownOptionElement = null;
+    };
+    document.addEventListener(`mouseup`, onDocumentMouseupHandler);
   });
 
-  gameContentElement.addEventListener(`click`, function (evt) {
-    const target = evt.target;
-    if (target.tagName.toLowerCase() !== HTML_IMG_TAG_NAME) {
+  gameContentElement.addEventListener(`mouseup`, (evt) => {
+    const mouseupOptionElement = findParentGameOption(evt.target, gameContentElement);
+    if (mousedownOptionElement && mouseupOptionElement && mousedownOptionElement === mouseupOptionElement) {
       contentPresenter.show(stats);
     }
   });
@@ -93,6 +117,8 @@ export default {
   getContent: () => {
     const contentElement = contentBuilder.build(screenTemplate);
     subscribe(contentElement);
+
+    transition.addBackToIntro(contentElement);
 
     return contentElement;
   }

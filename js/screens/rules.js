@@ -2,8 +2,8 @@
 
 import contentBuilder from '../content-builder.js';
 import contentPresenter from '../content-presenter.js';
-import intro from './intro.js';
 import game1 from './game-1.js';
+import transition from '../transition.js';
 
 const screenTemplate = `\
   <header class="header">
@@ -46,7 +46,7 @@ const screenTemplate = `\
  * @param {object} contentElement - Содержимое игрового экрана.
  */
 const subscribe = (contentElement) => {
-  const backElement = contentElement.querySelector(`.header__back`);
+  // const backElement = contentElement.querySelector(`.header__back`);
   const rulesFormElement = contentElement.querySelector(`.rules__form`);
   const rulesInputElement = rulesFormElement.querySelector(`.rules__input`);
   const rulesButtonElement = rulesFormElement.querySelector(`.rules__button.continue`);
@@ -55,9 +55,9 @@ const subscribe = (contentElement) => {
     return rulesInputElement.value.toString().length > 0;
   };
 
-  backElement.addEventListener(`click`, function () {
-    contentPresenter.show(intro);
-  });
+  // backElement.addEventListener(`click`, function () {
+  //   contentPresenter.show(intro);
+  // });
 
   rulesInputElement.addEventListener(`input`, function () {
     rulesButtonElement.disabled = !isPlayerNameValid();
@@ -84,6 +84,8 @@ export default {
   getContent: () => {
     const contentElement = contentBuilder.build(screenTemplate);
     subscribe(contentElement);
+
+    transition.addBackToIntro(contentElement, `.header__back`);
 
     return contentElement;
   }

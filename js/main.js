@@ -1,6 +1,6 @@
 /** @module main */
 
 import contentPresenter from './content-presenter.js';
-import introScreen from './screens/intro.js';
+import intro from './screens/intro.js';
 
-contentPresenter.show(introScreen);
+contentPresenter.show(intro);

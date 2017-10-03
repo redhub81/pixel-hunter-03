@@ -2,11 +2,11 @@
 
 import contentBuilder from '../content-builder.js';
 import contentPresenter from '../content-presenter.js';
-import intro from './intro.js';
 import game3 from './game-3.js';
+import transition from '../transition.js';
 
 const screenTemplate = `\
-<header class="header">
+  <header class="header">
     <div class="header__back">
       <button class="back">
         <img src="img/arrow_left.svg" width="45" height="45" alt="Back">
@@ -66,12 +66,7 @@ const screenTemplate = `\
  * @param {object} contentElement - Содержимое игрового экрана.
  */
 const subscribe = (contentElement) => {
-  const backElement = contentElement.querySelector(`.back`);
   const gameContentElement = contentElement.querySelector(`.game__content`);
-
-  backElement.addEventListener(`click`, function () {
-    contentPresenter.show(intro);
-  });
 
   gameContentElement.addEventListener(`change`, function (evt) {
     const target = evt.target;
@@ -93,6 +88,8 @@ export default {
   getContent: () => {
     const contentElement = contentBuilder.build(screenTemplate);
     subscribe(contentElement);
+
+    transition.addBackToIntro(contentElement);
 
     return contentElement;
   }
