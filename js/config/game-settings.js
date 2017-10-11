@@ -4,7 +4,7 @@
  * Настройки игры.
  * @type {object}
  */
-const gameSettings = {
+const GAME_SETTINGS = {
   /** Количество вопросов в игре. */
   totalQuestionsCount: 10,
   /** Исходное количество жизней у игрока. */
@@ -30,7 +30,7 @@ const gameSettings = {
     /** Бонусные очки за жизни. */
     liveBonus: {
       /** Бонус за одну сохраненную жизнь. */
-      keptLive: 50,
+      savedLive: 50,
     },
   },
 };
@@ -52,6 +52,6 @@ const gameSettings = {
  * @property {number} scoreRates.speedBonus.fast - Бонус за быстрый ответ.
  * @property {number} scoreRates.speedBonus.slow - Бонус за медленный ответ.
  * @property {object} scoreRates.liveBonus - Бонусные очки за жизни.
- * @property {number} scoreRates.liveBonus.keptLive - Бонус за одну сохраненную жизнь.
+ * @property {number} scoreRates.liveBonus.savedLive - Бонус за одну сохраненную жизнь.
  */
-export default gameSettings;
+export default GAME_SETTINGS;

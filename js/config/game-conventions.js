@@ -1,10 +1,10 @@
-/** @module game-contracts */
+/** @module game-conventions */
 
 /**
  * Соглашения принятые в игре.
  * @namespace
  */
-const gameConventions = {
+const GAME_CONVENTIONS = {
   /** Количество очков при завершении игры.
    * @namespace
    */
@@ -45,4 +45,4 @@ const gameConventions = {
  * @property {number} responseSpeed.fast - Быстрый ответ.
  * @property {number} responseSpeed.slow - Медленный ответ.
  */
-export default gameConventions;
+export default GAME_CONVENTIONS;
