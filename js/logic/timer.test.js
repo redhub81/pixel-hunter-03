@@ -1,15 +1,15 @@
 /** @module timer.test */
 
 import assert from 'assert';
-import {createTimer} from './timer.js';
+import Timer from './timer.js';
 
 describe(`Timer factory:`, () => {
   it(`creates an object with tick method for valid tick count.`, () => {
     // Arrange
-    const tickCount = 1;
+    const ticksCount = 1;
 
     // Act
-    const timer = createTimer(tickCount);
+    const timer = new Timer(ticksCount, () => {});
 
     // Assert
     assert.ok(timer && typeof timer === `object`, `expected object creation.`);
@@ -19,69 +19,59 @@ describe(`Timer factory:`, () => {
 
   it(`throws exception on invalid tick count.`, () => {
     // Arrange
-    const invalidTickCount = -1;
+    const invalidTicksCount = -1;
 
     // Act with assert
-    assert.throws(() => createTimer(invalidTickCount));
+    assert.throws(() => new Timer(invalidTicksCount, () => {}));
   });
 });
 
 describe(`Timer.tick() method:`, () => {
   it(`decreases ticks count by one on each invocation while ticks count greater than zero.`, () => {
     // Arrange
-    const initialTickCount = 10;
-    let timer = createTimer(initialTickCount);
+    const initialTicksCount = 10;
+    let timer = new Timer(initialTicksCount, () => {});
 
     // Act and assert
-    let tickCount = timer.getTickCount();
-    assert.ok(typeof tickCount === `number`, `expected tickCount is a number.`);
+    let ticksCount = timer.getTicksCount();
+    assert.ok(typeof ticksCount === `number`, `expected ticksCount is a number.`);
 
     // Act and assert
-    while (tickCount > 0) {
+    while (ticksCount > 0) {
       // Act
-      timer = timer.tick();
-      const oldTickCount = tickCount;
-      tickCount = timer.getTickCount();
+      timer.tick();
+      const oldTicksCount = ticksCount;
+      ticksCount = timer.getTicksCount();
 
       // Assert
-      assert.ok(oldTickCount - tickCount === 1,
-          `it is expected tickCount is less than initial tick count.`);
+      assert.ok(oldTicksCount - ticksCount === 1,
+          `it is expected ticksCount is less than initial tick count. oldTicksCount = ${oldTicksCount}, ticksCount = ${ticksCount}`);
     }
   });
 
-  it(`decreases ticks count not less then zero.`, () => {
+  it(`decreases ticks count not less when zero.`, () => {
     // Arrange
     const iterations = 2;
-    const initialTickCount = 1;
-    const expectedTickCountValues = new Array(iterations).fill(0);
-    let timer = createTimer(initialTickCount);
+    const initialTicksCount = 1;
+    const expectedTicksCountValues = new Array(iterations).fill(0);
+    let timer = new Timer(initialTicksCount, () => {});
 
     // Act
-    const timers = new Array(iterations).fill(null).map(function () {
-      timer = timer.tick();
-      return timer;
+    const ticksCountValues = new Array(iterations).fill(null).map(() => {
+      timer.tick();
+      return timer.getTicksCount();
     });
 
     // Assert
-    const tickCountValues = timers.map((t) => t.getTickCount());
-    assert.deepStrictEqual(tickCountValues, expectedTickCountValues,
-        `it is expected tickCount equals to zero on each tick() invocation.`);
-  });
-
-  it(`not throws exception on tick count has expired and callback absent.`, () => {
-    // Arrange
-    const initialTickCount = 1;
-    let timer = createTimer(initialTickCount);
-
-    // Act
-    assert.doesNotThrow(() => timer.tick());
+    assert.deepStrictEqual(ticksCountValues, expectedTicksCountValues,
+        `it is expected ticksCount equals to zero on each tick() invocation.`);
   });
 
   it(`timer notifies listener than tick count has expired.`, () => {
     // Arrange
-    const initialTickCount = 1;
+    const initialTicksCount = 1;
     let isCallbackInvoked = false;
-    let timer = createTimer(initialTickCount, void 0, () => {
+    let timer = new Timer(initialTicksCount, () => {
       isCallbackInvoked = true;
     });
 
@@ -94,36 +84,18 @@ describe(`Timer.tick() method:`, () => {
 
   it(`notifies listener on first tick count has expired only.`, () => {
     // Arrange
-    const initialTickCount = 1;
+    const initialTicksCount = 1;
     let callbackInvocationCount = 0;
-    let timer = createTimer(initialTickCount, void 0, () => {
+    let timer = new Timer(initialTicksCount, () => {
       callbackInvocationCount++;
     });
 
     // Act
-    timer = timer.tick();
-    timer = timer.tick();
+    timer.tick();
+    timer.tick();
 
     // Assert
     assert.ok(timer);
     assert.ok(callbackInvocationCount === 1, `it is expected callback has invoked one time.`);
   });
-
-  it(`notifies listener on each tick.`, () => {
-    // Arrange
-    const initialTickCount = 2;
-    let tickCallbackInvocationCount = 0;
-    let timer = createTimer(initialTickCount, () => {
-      tickCallbackInvocationCount++;
-    }, void 0);
-
-    // Act
-    timer.tick();
-    timer.tick();
-
-    // Assert
-    assert.ok(timer);
-    assert.ok(tickCallbackInvocationCount === 2, `it is expected callback has invoked 2 times. tickCallbackInvocationCount = ${tickCallbackInvocationCount}`);
-  });
-
 });

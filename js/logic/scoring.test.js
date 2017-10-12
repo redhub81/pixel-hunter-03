@@ -23,7 +23,7 @@ const getUserResponses = (
     .map(() => ({isRight, speed}));
 
 describe(`Game scoring:`, () => {
-  it(`is failed then less than 10 responses.`, () => {
+  it(`is failed when less than 10 responses.`, () => {
     // Arrange
     const userResponsesCases = [];
     for (let i = 1; i < 10; i++) {
@@ -41,7 +41,7 @@ describe(`Game scoring:`, () => {
     resultScores.forEach((score, index) => assert.ok(expect.game.failed(score), `expected game failed: caseIndex = ${index}.`));
   });
 
-  it(`is success then all responses, each response right, all lives saved, speed of each normal.`, () => {
+  it(`is success when all responses, each response right, all lives saved, speed of each normal.`, () => {
     // Arrange
     const userResponses = getUserResponses();
     const livesCount = gameSettings.totalLivesCount;
@@ -54,7 +54,7 @@ describe(`Game scoring:`, () => {
     assert.ok(resultScore === expectedScore, `expected game score = ${expectedScore}, but received ${resultScore}`);
   });
 
-  it(`is success then all responses, each response right, 2 lives saved, speed of each normal.`, () => {
+  it(`is success when all responses, each response right, 2 lives saved, speed of each normal.`, () => {
     // Arrange
     const userResponsesItems = getUserResponses();
     const livesCount = 2;
@@ -67,7 +67,7 @@ describe(`Game scoring:`, () => {
     assert.ok(resultScore === expectedScore, `expected game score = ${expectedScore}, but received ${resultScore}`);
   });
 
-  it(`is success then all responses, each response right, 1 lives saved, speed of each normal.`, () => {
+  it(`is success when all responses, each response right, 1 lives saved, speed of each normal.`, () => {
     // Arrange
     const userResponsesItems = getUserResponses();
     const livesCount = 1;
@@ -80,7 +80,7 @@ describe(`Game scoring:`, () => {
     assert.ok(resultScore === expectedScore, `expected game score = ${expectedScore}, but received ${resultScore}`);
   });
 
-  it(`is failed then all responses, each response right, less than 1 live saved, speed of each normal.`, () => {
+  it(`is failed when all responses, each response right, less than 1 live saved, speed of each normal.`, () => {
     // Arrange
     const userResponsesItems = getUserResponses();
     const livesCount = 0;
@@ -92,7 +92,7 @@ describe(`Game scoring:`, () => {
     assert.ok(expect.game.failed(resultScore), `expected game failed: score = ${resultScore}.`);
   });
 
-  it(`is success then all responses, each response right, all lives saved, speed of each fast.`, () => {
+  it(`is success when all responses, each response right, all lives saved, speed of each fast.`, () => {
     // Arrange
     const userResponsesItems = getUserResponses(void 0, void 0, gameConventions.responseSpeed.fast);
     const livesCount = gameSettings.totalLivesCount;
@@ -105,7 +105,7 @@ describe(`Game scoring:`, () => {
     assert.ok(resultScore === expectedScore, `expected game score = ${expectedScore}, but received ${resultScore}`);
   });
 
-  it(`is success then all responses, each response right, all lives saved, speed of each slow.`, () => {
+  it(`is success when all responses, each response right, all lives saved, speed of each slow.`, () => {
     // Arrange
     const userResponsesItems = getUserResponses(void 0, void 0, gameConventions.responseSpeed.slow);
     const livesCount = gameSettings.totalLivesCount;
@@ -118,7 +118,7 @@ describe(`Game scoring:`, () => {
     assert.ok(resultScore === expectedScore, `expected game score = ${expectedScore}, but received ${resultScore}`);
   });
 
-  it(`is success then all responses, first 2 response wrong other right, all lives saved, speed of each normal.`, () => {
+  it(`is success when all responses, first 2 response wrong other right, all lives saved, speed of each normal.`, () => {
     // Arrange
     const userResponsesItems = getUserResponses().map((it, index) => {
       it.isRight = index > 1;

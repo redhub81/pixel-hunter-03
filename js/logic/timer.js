@@ -2,36 +2,39 @@
 
 /**
  * Создает объект таймера.
- * @param {number} tickCount - Время в тиках таймера.
- * @param {function=} tickCallback - Опциональнйы обратный вызов при очередном тике.
- * @param {function=} finalCallback - Опциональнйы обратный вызов при отсутствии тиков.
- * @return {object} - Таймер.
+ * @param {number} ticksCount - Время в тиках таймера.
+ * @param {function} finalCallback - Опциональнйы обратный вызов при отсутствии тиков.
  */
-const createTimer = function (tickCount, tickCallback = null, finalCallback = null) {
-  if (tickCount < 0) {
-    throw new Error(`The argument 'tickCount' must be not less than zero.`);
+const Timer = function (ticksCount, finalCallback) {
+  if (ticksCount < 0) {
+    throw new Error(`The argument 'ticksCount' must be not less than zero.`);
   }
-  let timer = {
-    getTickCount: () => tickCount,
-    tick: () => {
-      const oldTickCount = tickCount;
-      tickCount = tickCount !== 0 ? tickCount - 1 : tickCount;
-      if (tickCount === oldTickCount) {
-        return timer;
-      }
-      const defaultTickCallback = (t, fcb, tcb) => createTimer(t.getTickCount(), fcb, tcb);
-      timer = (tickCallback || defaultTickCallback)(timer, finalCallback, tickCallback)
-        || defaultTickCallback(timer, finalCallback, tickCallback);
-      if ((!timer.getTickCount()) && finalCallback) {
-        finalCallback(timer);
-      }
-      return timer;
-    }
-  };
-  return timer;
+  this._ticksCount = ticksCount;
+  this._finalCallback = finalCallback;
+};
+
+Timer.prototype.getTicksCount = function () {
+  return this._ticksCount;
+};
+
+Timer.prototype.setTicksCount = function (ticksCount) {
+  if (ticksCount < 0) {
+    throw new Error(`The argument 'ticksCount' must be not less than zero.`);
+  }
+  this._ticksCount = ticksCount;
+};
+
+Timer.prototype.tick = function () {
+  if (this._ticksCount === 0) {
+    return;
+  }
+  this._ticksCount--;
+  if (this._ticksCount === 0) {
+    this._finalCallback();
+  }
 };
 
 /* Экспорт интерфейса модуля.
  *************************************************************************************************/
 
-export {createTimer};
+export default Timer;
