@@ -1,4 +1,4 @@
-/** @module timer.test */
+/** @module logic/timer.test */
 
 import assert from 'assert';
 import Timer from './timer.js';

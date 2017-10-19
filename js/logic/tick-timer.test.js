@@ -1,4 +1,4 @@
-/** @module tick-timer.test */
+/** @module logic/tick-timer.test */
 
 import assert from 'assert';
 import {createTimer} from './tick-timer.js';

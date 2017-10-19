@@ -1,4 +1,4 @@
-/** @module scoring.test */
+/** @module logic/scoring.test */
 
 import assert from 'assert';
 import gameConventions from "../config/game-conventions.js";
@@ -17,10 +17,10 @@ const expect = {
 };
 
 const getUserResponses = (
-    count = gameSettings.totalQuestionsCount, isRight = true, speed = gameConventions.responseSpeed.normal
+    count = gameSettings.totalQuestionsCount, resultType = gameConventions.resultType.right, speed = gameConventions.speedType.normal
 ) => new Array(count)
     .fill(null)
-    .map(() => ({isRight, speed}));
+    .map(() => ({answerCode: 0, resultType, speed}));
 
 describe(`Game scoring:`, () => {
   it(`is failed when less than 10 responses.`, () => {
@@ -94,7 +94,7 @@ describe(`Game scoring:`, () => {
 
   it(`is success when all responses, each response right, all lives saved, speed of each fast.`, () => {
     // Arrange
-    const userResponsesItems = getUserResponses(void 0, void 0, gameConventions.responseSpeed.fast);
+    const userResponsesItems = getUserResponses(void 0, void 0, gameConventions.speedType.fast);
     const livesCount = gameSettings.totalLivesCount;
     const expectedScore = 1650;
 
@@ -107,7 +107,7 @@ describe(`Game scoring:`, () => {
 
   it(`is success when all responses, each response right, all lives saved, speed of each slow.`, () => {
     // Arrange
-    const userResponsesItems = getUserResponses(void 0, void 0, gameConventions.responseSpeed.slow);
+    const userResponsesItems = getUserResponses(void 0, void 0, gameConventions.speedType.slow);
     const livesCount = gameSettings.totalLivesCount;
     const expectedScore = 650;
 
@@ -121,7 +121,7 @@ describe(`Game scoring:`, () => {
   it(`is success when all responses, first 2 response wrong other right, all lives saved, speed of each normal.`, () => {
     // Arrange
     const userResponsesItems = getUserResponses().map((it, index) => {
-      it.isRight = index > 1;
+      it.resultType = index > 1 ? gameConventions.resultType.right : gameConventions.resultType.wrong;
       return it;
     });
     const livesCount = gameSettings.totalLivesCount;

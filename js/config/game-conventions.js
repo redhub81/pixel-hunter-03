@@ -1,4 +1,4 @@
-/** @module game-conventions */
+/** @module config/game-conventions */
 
 /**
  * Соглашения принятые в игре.
@@ -18,17 +18,49 @@ const GAME_CONVENTIONS = {
      */
     minimum: 0,
   },
-  /** Скорость ответа.
-   * @readonly
+  /** Типы результатов игры.
    * @enum {string}
    */
-  responseSpeed: {
+  resultType: {
+    /** Правильный результат. */
+    right: `right`,
+    /** Неверный результат. */
+    wrong: `wrong`,
+  },
+  /** Скорость ответа.
+   * @enum {string}
+   */
+  speedType: {
     /** Нормальная скорость. */
     normal: `normal`,
     /** Быстрый ответ. */
     fast: `fast`,
     /** Медленный ответ. */
     slow: `slow`,
+  },
+  /** Типы изображений.
+   * @enum {string}
+   */
+  imageType: {
+    /** Фото */
+    photo: `photo`,
+    painting: `painting`,
+  },
+  /** Типы уровней.
+   * @enum {number}
+   */
+  levelType: {
+    oneImage: 1,
+    twoImages: 2,
+    photoAmongImages: 3,
+    paintingAmongImages: 4,
+  },
+  /** Коды изображений.
+   * @enum {number}
+   */
+  imageCode: {
+    photo: 0,
+    painting: 1,
   }
 };
 
@@ -40,9 +72,9 @@ const GAME_CONVENTIONS = {
  * @type {object}
  * @property {object} scoreRates - Количество очков при завершении игры.
  * @property {number} scoreRates.gameFailed - Количество очков в случае проигрыша.
- * @property {object} responseSpeed - Скорость ответа.
- * @property {number} responseSpeed.normal - Нормальная скорость.
- * @property {number} responseSpeed.fast - Быстрый ответ.
- * @property {number} responseSpeed.slow - Медленный ответ.
+ * @property {object} speedType - Скорость ответа.
+ * @property {number} speedType.normal - Нормальная скорость.
+ * @property {number} speedType.fast - Быстрый ответ.
+ * @property {number} speedType.slow - Медленный ответ.
  */
 export default GAME_CONVENTIONS;

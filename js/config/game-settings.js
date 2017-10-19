@@ -1,4 +1,4 @@
-/** @module game-settings */
+/** @module config/game-settings */
 
 /**
  * Настройки игры.
@@ -9,6 +9,12 @@ const GAME_SETTINGS = {
   totalQuestionsCount: 10,
   /** Исходное количество жизней у игрока. */
   totalLivesCount: 3,
+  /** Исходное количество времени у игрока. */
+  totalTime: 30,
+  /** Минимальное время быстрого ответа. */
+  fastTime: 20,
+  /** Максимальное время медленного ответа. */
+  slowTime: 10,
   /** Оценки результатов игры в очках. */
   scoreRates: {
     /** Очки за данные ответы. */
