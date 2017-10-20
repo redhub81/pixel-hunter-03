@@ -2,10 +2,13 @@
 
 import gameConventions from '../config/game-conventions.js';
 
+const {ImageCode} = gameConventions;
+
+
 export default {
   encode: (answers) => answers.reduce((acc, answer) => {
     acc <<= 1;
-    acc += gameConventions.imageCode[answer];
+    acc += ImageCode[answer];
     return acc;
   }, 0)
 };

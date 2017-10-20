@@ -1,8 +1,12 @@
 /** @module screens/game-2 */
 
+import gameConventions from '../config/game-conventions.js';
 import contentBuilder from '../content-builder.js';
 import answerEncoder from '../logic/answer-encoder.js';
 import progress from '../parts/progress.js';
+
+const {ImageType} = gameConventions;
+
 
 const getScreenTemplate = (model) => `\
   <div class="game">
@@ -11,11 +15,11 @@ const getScreenTemplate = (model) => `\
       <div class="game__option">
         <img src="${model.level.images[0].location}" alt="Option 1" width="705" height="455">
         <label class="game__answer  game__answer--photo">
-          <input name="question1" type="radio" value="photo">
+          <input name="question1" type="radio" value="${ImageType.PHOTO}">
           <span>Фото</span>
         </label>
         <label class="game__answer  game__answer--wide  game__answer--paint">
-          <input name="question1" type="radio" value="painting">
+          <input name="question1" type="radio" value="${ImageType.PAINTING}">
           <span>Рисунок</span>
         </label>
       </div>
@@ -44,7 +48,7 @@ const subscribe = (contentElement) => {
 };
 
 const screen = {
-  name: `level-2`,
+  name: `game-2`,
   /**
    * Возвращает содержимое игрового экрана.
    * @function

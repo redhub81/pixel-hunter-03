@@ -1,63 +1,62 @@
 /** @module config/game-settings */
 
-/**
- * Настройки игры.
- * @type {object}
+/** Суммарное количство ресурсов в игре.
+ * @enum {number}
  */
-const GAME_SETTINGS = {
+const TotalCount = {
   /** Количество вопросов в игре. */
-  totalQuestionsCount: 10,
+  QUESTIONS: 10,
   /** Исходное количество жизней у игрока. */
-  totalLivesCount: 3,
+  LIVES: 3,
   /** Исходное количество времени у игрока. */
-  totalTime: 30,
+  TIME: 30,
+};
+
+/** Лимиты времени.
+ * @enum {number}
+ */
+const TimeSteps = {
   /** Минимальное время быстрого ответа. */
-  fastTime: 20,
+  FAST: 20,
   /** Максимальное время медленного ответа. */
-  slowTime: 10,
-  /** Оценки результатов игры в очках. */
-  scoreRates: {
-    /** Очки за данные ответы. */
-    response: {
-      /** Очки за верный ответ. */
-      right: 100,
-      /** Очки за неверный ответ. */
-      wrong: 0,
-    },
-    /** Бонусные очки за скорость. */
-    speedBonus: {
-      /** Бонус за ответ с нормальной скоростью. */
-      normal: 0,
-      /** Бонус за быстрый ответ. */
-      fast: 50,
-      /** Бонус за медленный ответ. */
-      slow: -50,
-    },
-    /** Бонусные очки за жизни. */
-    liveBonus: {
-      /** Бонус за одну сохраненную жизнь. */
-      savedLive: 50,
-    },
-  },
+  SLOW: 10,
+};
+
+/** Базовая оценка каждого ответа.
+ * @enum {number}
+ */
+const AnswerScore = {
+  /** Баллы за верный ответ. */
+  RIGHT: 100,
+  /** Баллы за неверный ответ. */
+  WRONG: 0,
+};
+
+/** Оценка скорости каждого ответа.
+ * @enum {number}
+ * */
+const SpeedScore = {
+  /** Баллы за ответ с нормальной скоростью. */
+  NORMAL: 0,
+  /** Баллы за быстрый ответ. */
+  FAST: 50,
+  /** Баллы за медленный ответ. */
+  SLOW: -50,
+};
+
+/** Интегральная оценка точности ответов. */
+const AccuracyScore = {
+  /** Баллы за каждую не использованную игроком жизнь. */
+  LIVES: 50,
 };
 
 /* Экспорт интерфейса модуля.
  *************************************************************************************************/
 
-/**
- * Предоставляет настройки игры.
- * @type {object}
- * @property {number} totalQuestionsCount - Количество вопросов в игре.
- * @property {number} totalLivesCount - Исходное количество жизней у игрока.
- * @property {object} scoreRates - Оценки результатов.
- * @property {object} scoreRates.response - Очки за данные ответы.
- * @property {number} scoreRates.response.right - Очки за верный ответ.
- * @property {number} scoreRates.response.right - Очки за неверный ответ.
- * @property {object} scoreRates.speedBonus - Оценки ответов.
- * @property {number} scoreRates.speedBonus.normal - Бонус за ответ с нормальной скоростью.
- * @property {number} scoreRates.speedBonus.fast - Бонус за быстрый ответ.
- * @property {number} scoreRates.speedBonus.slow - Бонус за медленный ответ.
- * @property {object} scoreRates.liveBonus - Бонусные очки за жизни.
- * @property {number} scoreRates.liveBonus.savedLive - Бонус за одну сохраненную жизнь.
- */
-export default GAME_SETTINGS;
+export default {
+  TotalCount,
+  TimeSteps,
+  AnswerScore,
+  SpeedScore,
+  AccuracyScore
+};

@@ -3,6 +3,9 @@
 import contentBuilder from '../content-builder.js';
 import gameSettings from '../config/game-settings.js';
 
+const {TotalCount} = gameSettings;
+
+
 const getBackBar = () => `\
   <div class="header__back">
     <button class="back">
@@ -16,7 +19,7 @@ const getTimeBar = (time) => `\
 
 const getLivesBar = (livesCount) => `\
   <div class="game__lives">
-    ${new Array(gameSettings.totalLivesCount - livesCount)
+    ${new Array(TotalCount.LIVES - livesCount)
       .fill(`<img src="img/heart__empty.svg" class="game__heart" alt="Life" width="32" height="32">`)
       .join(`\n`)}
     ${new Array(livesCount)
@@ -43,10 +46,10 @@ const subscribe = (contentElement) => {
 
 const screen = {
   /**
-   * Возвращает содержимое игрового экрана.
+   * Возвращает хедер игрового экрана.
    * @function
    * @param {object} model - Модель данных.
-   * @return {object} - Футер игрового экрана.
+   * @return {object} - Хедер игрового экрана.
    */
   getContent: (model) => {
     const template = getHeaderTemplate(model);

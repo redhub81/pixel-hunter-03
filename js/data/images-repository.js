@@ -1,11 +1,14 @@
 /** @module data/images-repository */
 
-import mathHelper from './math-helper.js';
 import gameConventions from '../config/game-conventions.js';
+import mathHelper from './math-helper.js';
+
+const {ImageType} = gameConventions;
+
 
 const imageSourcePrefix = `imageSource`;
 const imageSourcesByType = {
-  [`${imageSourcePrefix}${gameConventions.imageType.photo}`]: [
+  [`${imageSourcePrefix}${ImageType.PHOTO}`]: [
     // People
     `http://i.imgur.com/1KegWPz.jpg`,
     // Animals
@@ -13,7 +16,7 @@ const imageSourcesByType = {
     // Nature
     `http://i.imgur.com/DKR1HtB.jpg`
   ],
-  [`${imageSourcePrefix}${gameConventions.imageType.painting}`]: [
+  [`${imageSourcePrefix}${ImageType.PAINTING}`]: [
     // People
     `https://k42.kn3.net/CF42609C8.jpg`,
     // Animals

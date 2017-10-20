@@ -5,12 +5,16 @@ import gameSettings from '../config/game-settings.js';
 import contentBuilder from '../content-builder.js';
 import progress from '../parts/progress.js';
 
+const {ResultType, SpeedType} = gameConventions;
+const {AnswerScore, SpeedScore, AccuracyScore} = gameSettings;
+
+
 const getSpeedFastBonusTemplate = (model) => `\
   <tr>
     <td></td>
     <td class="result__extra">Бонус за скорость:</td>
     <td class="result__extra">${model.count}&nbsp;<span class="stats__result stats__result--fast"></span></td>
-    <td class="result__points">×&nbsp;${gameSettings.scoreRates.speedBonus.fast}</td>
+    <td class="result__points">×&nbsp;${SpeedScore.FAST}</td>
     <td class="result__total">${model.points}</td>
   </tr>`;
 
@@ -19,7 +23,7 @@ const getLiveBonusTemplate = (model) => `\
     <td></td>
     <td class="result__extra">Бонус за жизни:</td>
     <td class="result__extra">${model.count}&nbsp;<span class="stats__result stats__result--alive"></span></td>
-    <td class="result__points">×&nbsp;${gameSettings.scoreRates.liveBonus.savedLive}</td>
+    <td class="result__points">×&nbsp;${AccuracyScore.LIVES}</td>
     <td class="result__total">${model.points}</td>
   </tr>`;
 
@@ -28,7 +32,7 @@ const getSpeedSlowFineTemplate = (model) => `\
     <td></td>
     <td class="result__extra">Штраф за медлительность:</td>
     <td class="result__extra">${model.count}&nbsp;<span class="stats__result stats__result--slow"></span></td>
-    <td class="result__points">×&nbsp;${Math.abs(gameSettings.scoreRates.speedBonus.slow)}</td>
+    <td class="result__points">×&nbsp;${Math.abs(SpeedScore.SLOW)}</td>
     <td class="result__total">${model.points}</td>
   </tr>`;
 
@@ -45,14 +49,14 @@ const getGameSuccessStatTemplate = (number, model) => `\
       <td colspan="2">
         ${progress.getTemplate(model.answers)}
       </td>
-      <td class="result__points">×&nbsp;${gameSettings.scoreRates.response.right}</td>
-      <td class="result__total">${model.levelsStatistic[gameConventions.resultType.right].points}</td>
+      <td class="result__points">×&nbsp;${AnswerScore.RIGHT}</td>
+      <td class="result__total">${model.levelsStatistic[ResultType.RIGHT].points}</td>
     </tr>
-    ${model.speedStatistic[gameConventions.speedType.fast].points > 0
-    ? getSpeedFastBonusTemplate(model.speedStatistic[gameConventions.speedType.fast]) : ``}
+    ${model.speedStatistic[SpeedType.FAST].points > 0
+    ? getSpeedFastBonusTemplate(model.speedStatistic[SpeedType.FAST]) : ``}
     ${model.livesStatistic.points > 0 ? getLiveBonusTemplate(model.livesStatistic) : ``}
-    ${model.speedStatistic[gameConventions.speedType.slow].points > 0
-    ? getSpeedSlowFineTemplate(model.speedStatistic[gameConventions.speedType.slow]) : ``}
+    ${model.speedStatistic[SpeedType.SLOW].points > 0
+    ? getSpeedSlowFineTemplate(model.speedStatistic[SpeedType.SLOW]) : ``}
     ${getTotalPointsTemplate(model.totalPoints)}
   </table>`;
 
@@ -70,11 +74,12 @@ const getGameFailedStatTemplate = (number, model) => `\
 
 const getScreenTemplate = (results) => `\
   <div class="result">
-    <h1>Победа!</h1>
+    <h1>${results[0].resultType === ResultType.RIGHT ? `Победа!` : `Поражение!`}</h1>
     ${results
-      .map((result, index) => result.resultType === gameConventions.resultType.right
+      .map((result, index) => result.resultType === ResultType.RIGHT
         ? getGameSuccessStatTemplate(index + 1, result)
-        : getGameFailedStatTemplate(index + 1, result))}
+        : getGameFailedStatTemplate(index + 1, result))
+      .join(`\n`)}
   </div>`;
 
 const screen = {

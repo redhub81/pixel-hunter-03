@@ -1,9 +1,12 @@
 /** @module screens/game-3 */
 
-import contentBuilder from '../content-builder.js';
 import gameConventions from '../config/game-conventions.js';
+import contentBuilder from '../content-builder.js';
 import answerEncoder from '../logic/answer-encoder.js';
 import progress from '../parts/progress.js';
+
+const {LevelType, ImageType} = gameConventions;
+
 
 const getOptionTemplate = (model) => `\
   <div class="game__option">
@@ -65,9 +68,9 @@ const subscribe = (contentElement, model) => {
     if (mousedownOptionElement && mouseupOptionElement && mousedownOptionElement === mouseupOptionElement) {
       const optionElements = gameContentElement.querySelectorAll(`.game__option`);
       const levelType = model.level.type;
-      const selectTypes = levelType === gameConventions.levelType.photoAmongImages
-        ? [gameConventions.imageType.photo, gameConventions.imageType.painting]
-        : [gameConventions.imageType.painting, gameConventions.imageType.photo];
+      const selectTypes = levelType === LevelType.PHOTO_AMONG_THREE_IMAGES
+        ? [ImageType.PHOTO, ImageType.PAINTING]
+        : [ImageType.PAINTING, ImageType.PHOTO];
       const answers = Array.from(optionElements).map((it) => {
         return mouseupOptionElement === it ? selectTypes[0] : selectTypes[1];
       });
@@ -80,7 +83,7 @@ const subscribe = (contentElement, model) => {
 };
 
 const screen = {
-  name: `level-3`,
+  name: `game-3`,
   /**
    * Возвращает содержимое игрового экрана.
    * @function

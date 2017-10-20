@@ -13,6 +13,9 @@ import stats from './screens/stats.js';
 import header from './parts/header.js';
 import footer from './parts/footer.js';
 
+const {LevelType} = gameConventions;
+
+
 const nextScreenTransitionByScreenName = {
   [intro.name]: () => {
     goToSplashScreen(greeting);
@@ -31,10 +34,10 @@ const nextScreenTransitionByScreenName = {
 
 const getLevelTypeKey = (levelType) => `level-${levelType}`;
 const screenByLevelType = {
-  [getLevelTypeKey(gameConventions.levelType.oneImage)]: game2,
-  [getLevelTypeKey(gameConventions.levelType.twoImages)]: game1,
-  [getLevelTypeKey(gameConventions.levelType.photoAmongImages)]: game3,
-  [getLevelTypeKey(gameConventions.levelType.paintingAmongImages)]: game3,
+  [getLevelTypeKey(LevelType.TYPE_OF_ONE_IMAGE)]: game2,
+  [getLevelTypeKey(LevelType.TYPE_OF_TWO_IMAGES)]: game1,
+  [getLevelTypeKey(LevelType.PHOTO_AMONG_THREE_IMAGES)]: game3,
+  [getLevelTypeKey(LevelType.PAINTING_AMONG_THREE_IMAGES)]: game3,
 };
 
 let currentScreen;

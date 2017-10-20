@@ -5,13 +5,17 @@ import gameSettings from '../config/game-settings.js';
 import levelsFactory from './levels-factory.js';
 import scoring from '../logic/scoring.js';
 
+const {ResultType, SpeedType, ScoreLimits} = gameConventions;
+const {TotalCount, TimeSteps} = gameSettings;
+
+
 const createGameState = function (playerName) {
   return {
     player: {
       name: playerName
     },
-    livesCount: gameSettings.totalLivesCount,
-    time: 0.5 * gameSettings.totalTime,
+    livesCount: TotalCount.LIVES,
+    time: 0.5 * TotalCount.TIME,
     levelNumber: 0,
     level: {},
     answers: [],
@@ -21,25 +25,25 @@ const createGameState = function (playerName) {
 
 const createGameAnswer = function (answerCode, isRight, time) {
   const resultType = isRight
-    ? gameConventions.resultType.right
-    : gameConventions.resultType.wrong;
-  let speed = gameConventions.speedType.normal;
-  if (time > gameSettings.fastTime) {
-    speed = gameConventions.speedType.fast;
-  } else if (time < gameSettings.slowTime) {
-    speed = gameConventions.speedType.slow;
+    ? ResultType.RIGHT
+    : ResultType.WRONG;
+  let speed = SpeedType.NORMAL;
+  if (time > TimeSteps.FAST) {
+    speed = SpeedType.FAST;
+  } else if (time < TimeSteps.SLOW) {
+    speed = SpeedType.SLOW;
   }
   return {answerCode, resultType, speed};
 };
 
 const createGameResult = function (gameState) {
   const totalPoints = scoring.getCompletionScore(gameState.answers, gameState.livesCount);
-  const isSuccess = totalPoints !== gameConventions.scoreLimits.gameFailed;
+  const isSuccess = totalPoints !== ScoreLimits.FAILED;
   const result = {
     answers: gameState.answers,
     resultType: isSuccess
-      ? gameConventions.resultType.right
-      : gameConventions.resultType.wrong,
+      ? ResultType.RIGHT
+      : ResultType.WRONG,
     totalPoints,
     levelsStatistic: {},
     speedStatistic: {},

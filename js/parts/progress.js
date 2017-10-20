@@ -4,6 +4,10 @@ import gameConventions from '../config/game-conventions.js';
 import gameSettings from '../config/game-settings.js';
 import contentBuilder from '../content-builder.js';
 
+const {ResultType, SpeedType} = gameConventions;
+const {TotalCount} = gameSettings;
+
+
 const getStatusTemplate = (model) => `<li class="stats__result stats__result--${model}"></li>`;
 
 const getStatusesTemplate = (statuses) => `\
@@ -15,18 +19,18 @@ const getStatus = (answer) => {
   if (!answer || answer.isRight === null) {
     return `unknown`;
   }
-  if (answer.resultType === gameConventions.resultType.wrong) {
+  if (answer.resultType === ResultType.WRONG) {
     return `wrong`;
   }
   switch (answer.speed) {
-    case gameConventions.speedType.fast: return `fast`;
-    case gameConventions.speedType.normal: return `correct`;
-    default: return `normal`;
+    case SpeedType.FAST: return `fast`;
+    case SpeedType.SLOW: return `slow`;
+    default: return `correct`;
   }
 };
 
 const getStatuses = (answers) => {
-  const unknownAnswers = new Array(gameSettings.totalQuestionsCount - answers.length).fill(void 0);
+  const unknownAnswers = new Array(TotalCount.QUESTIONS - answers.length).fill(void 0);
   return answers.concat(unknownAnswers).map(getStatus);
 };
 
@@ -34,15 +38,19 @@ const getStatuses = (answers) => {
  *************************************************************************************************/
 
 export default {
+  /** Возвращает шаблон представления прогресса прохождения игры.
+   * @param {object} answers - Ответы пользователя.
+   * @return {object} - Шаблон части содержимого игрового экрана.
+   */
   getTemplate: (answers) => {
     const statuses = getStatuses(answers);
     return getStatusesTemplate(statuses);
   },
   /**
-   * Возвращает содержимое игрового экрана.
+   * Возвращает содержимое представления прогресса прохождения игры.
    * @function
    * @param {object} answers - Ответы пользователя.
-   * @return {object} - Футер игрового экрана.
+   * @return {object} - Содержимое представления прогресса прохождения игры.
    */
   getContent: (answers) => {
     const statuses = getStatuses(answers);

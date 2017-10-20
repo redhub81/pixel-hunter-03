@@ -2,6 +2,7 @@
 
 import contentBuilder from '../content-builder.js';
 
+
 const getScreenTemplate = () => `\
   <div class="rules">
     <h1 class="rules__title">Правила</h1>

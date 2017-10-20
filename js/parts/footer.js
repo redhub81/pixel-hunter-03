@@ -19,7 +19,7 @@ const getFooterTemplate = () => `\
 
 export default {
   /**
-   * Возвращает содержимое игрового экрана.
+   * Возвращает футер игрового экрана.
    * @function
    * @param {object} model - Модель данных.
    * @return {object} - Футер игрового экрана.

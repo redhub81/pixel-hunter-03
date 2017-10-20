@@ -2,6 +2,7 @@
 
 import contentBuilder from '../content-builder.js';
 
+
 const getScreenTemplate = () => `\
   <div id="main" class="central__content">
     <div id="intro" class="intro">
