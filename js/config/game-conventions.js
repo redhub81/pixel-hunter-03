@@ -1,48 +1,76 @@
-/** @module game-conventions */
+/** @module config/game-conventions */
 
-/**
- * Соглашения принятые в игре.
- * @namespace
+/** Типы уровней.
+ * @enum {number}
  */
-const GAME_CONVENTIONS = {
-  /** Количество очков при завершении игры.
-   * @namespace
-   */
-  scoreLimits: {
-    /** Количество очков в случае проигрыша.
-     * @type {number}
-     */
-    gameFailed: -1,
-    /** Минимальное количество очков.
-     * @type {number}
-     */
-    minimum: 0,
-  },
-  /** Скорость ответа.
-   * @readonly
-   * @enum {string}
-   */
-  responseSpeed: {
-    /** Нормальная скорость. */
-    normal: `normal`,
-    /** Быстрый ответ. */
-    fast: `fast`,
-    /** Медленный ответ. */
-    slow: `slow`,
-  }
+const LevelType = {
+  /** Требуется указать тип одного изображения. */
+  TYPE_OF_ONE_IMAGE: 1,
+  /** Требуется указать тип каждого из двух изображений. */
+  TYPE_OF_TWO_IMAGES: 2,
+  /** Требуется указать одно фото среди 3 изображений. */
+  PHOTO_AMONG_THREE_IMAGES: 3,
+  /** Требуется указать один рисунок среди 3 изображений. */
+  PAINTING_AMONG_THREE_IMAGES: 4,
+};
+
+/** Типы изображений.
+ * @enum {string}
+ */
+const ImageType = {
+  /** Фото */
+  PHOTO: `PHOTO`,
+  PAINTING: `PAINTING`,
+};
+
+/** Коды изображений.
+ * @enum {number}
+ */
+const ImageCode = {
+  PHOTO: 0,
+  PAINTING: 1,
+};
+
+/** Количество очков при завершении игры.
+ * @enum {number}
+ */
+const ScoreLimits = {
+  /** Количество очков в случае проигрыша. */
+  FAILED: -1,
+  /** Минимальное количество очков. */
+  MINIMUM: 0,
+};
+
+/** Типы результатов игры.
+ * @enum {string}
+ */
+const ResultType = {
+  /** Правильный результат. */
+  RIGHT: `RIGHT`,
+  /** Неверный результат. */
+  WRONG: `WRONG`,
+};
+
+/** Скорость ответа.
+ * @enum {string}
+ */
+const SpeedType = {
+  /** Нормальная скорость. */
+  NORMAL: `NORMAL`,
+  /** Быстрый ответ. */
+  FAST: `FAST`,
+  /** Медленный ответ. */
+  SLOW: `SLOW`,
 };
 
 /* Экспорт интерфейса модуля.
  *************************************************************************************************/
 
-/**
- * Соглашения принятые в игре.
- * @type {object}
- * @property {object} scoreRates - Количество очков при завершении игры.
- * @property {number} scoreRates.gameFailed - Количество очков в случае проигрыша.
- * @property {object} responseSpeed - Скорость ответа.
- * @property {number} responseSpeed.normal - Нормальная скорость.
- * @property {number} responseSpeed.fast - Быстрый ответ.
- * @property {number} responseSpeed.slow - Медленный ответ.
- */
-export default GAME_CONVENTIONS;
+export default {
+  ScoreLimits,
+  ResultType,
+  SpeedType,
+  ImageType,
+  LevelType,
+  ImageCode,
+};

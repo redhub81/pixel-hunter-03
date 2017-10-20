@@ -1,4 +1,4 @@
-/** @module timer */
+/** @module logic/timer */
 
 /**
  * Создает объект таймера.

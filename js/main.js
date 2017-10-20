@@ -1,6 +1,11 @@
 /** @module main */
 
-import contentPresenter from './content-presenter.js';
-import intro from './screens/intro.js';
+import imagesRepository from './data/images-repository.js';
+import transition from './transition.js';
 
-contentPresenter.show(intro);
+imagesRepository.loadImages(() => {
+  transition.init();
+  transition.goToStartScreen();
+});
+
+

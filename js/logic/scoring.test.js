@@ -1,9 +1,13 @@
-/** @module scoring.test */
+/** @module logic/scoring.test */
 
 import assert from 'assert';
 import gameConventions from "../config/game-conventions.js";
 import gameSettings from "../config/game-settings.js";
 import scoring from './scoring.js';
+
+const {ResultType, SpeedType, ScoreLimits} = gameConventions;
+const {TotalCount} = gameSettings;
+
 
 /**
  * Предоставляет средства проверки результата
@@ -11,30 +15,29 @@ import scoring from './scoring.js';
  */
 const expect = {
   game: {
-    failed: (score) => score === gameConventions.scoreLimits.gameFailed,
-    success: (score) => score > gameConventions.scoreLimits.minimum,
+    failed: (score) => score === ScoreLimits.FAILED,
+    success: (score) => score > ScoreLimits.MINIMUM,
   }
 };
 
-const getUserResponses = (
-    count = gameSettings.totalQuestionsCount, isRight = true, speed = gameConventions.responseSpeed.normal
-) => new Array(count)
-    .fill(null)
-    .map(() => ({isRight, speed}));
+const getUserResponses = (count = TotalCount.QUESTIONS, resultType = ResultType.RIGHT, speed = SpeedType.NORMAL) =>
+  new Array(count)
+      .fill(null)
+      .map(() => ({answerCode: 0, resultType, speed}));
 
 describe(`Game scoring:`, () => {
   it(`is failed when less than 10 responses.`, () => {
     // Arrange
+    const LIVES_COUNT = TotalCount.LIVES;
     const userResponsesCases = [];
     for (let i = 1; i < 10; i++) {
       userResponsesCases[i] = getUserResponses(i);
     }
-    const livesCount = gameSettings.totalLivesCount;
 
     // Act
     const resultScores = [];
     for (let i = 1; i < userResponsesCases.length; i++) {
-      resultScores[i] = scoring.getCompletionScore(userResponsesCases[i], livesCount);
+      resultScores[i] = scoring.getCompletionScore(userResponsesCases[i], LIVES_COUNT);
     }
 
     // Assert
@@ -43,50 +46,50 @@ describe(`Game scoring:`, () => {
 
   it(`is success when all responses, each response right, all lives saved, speed of each normal.`, () => {
     // Arrange
+    const LIVES_COUNT = TotalCount.LIVES;
+    const EXPECTED_SCORE = 1150;
     const userResponses = getUserResponses();
-    const livesCount = gameSettings.totalLivesCount;
-    const expectedScore = 1150;
 
     // Act
-    const resultScore = scoring.getCompletionScore(userResponses, livesCount);
+    const resultScore = scoring.getCompletionScore(userResponses, LIVES_COUNT);
 
     // Assert
-    assert.ok(resultScore === expectedScore, `expected game score = ${expectedScore}, but received ${resultScore}`);
+    assert.ok(resultScore === EXPECTED_SCORE, `expected game score = ${EXPECTED_SCORE}, but received ${resultScore}`);
   });
 
   it(`is success when all responses, each response right, 2 lives saved, speed of each normal.`, () => {
     // Arrange
+    const LIVES_COUNT = 2;
+    const EXPECTED_SCORE = 1100;
     const userResponsesItems = getUserResponses();
-    const livesCount = 2;
-    const expectedScore = 1100;
 
     // Act
-    const resultScore = scoring.getCompletionScore(userResponsesItems, livesCount);
+    const resultScore = scoring.getCompletionScore(userResponsesItems, LIVES_COUNT);
 
     // Assert
-    assert.ok(resultScore === expectedScore, `expected game score = ${expectedScore}, but received ${resultScore}`);
+    assert.ok(resultScore === EXPECTED_SCORE, `expected game score = ${EXPECTED_SCORE}, but received ${resultScore}`);
   });
 
   it(`is success when all responses, each response right, 1 lives saved, speed of each normal.`, () => {
     // Arrange
+    const LIVES_COUNT = 1;
+    const EXPECTED_SCORE = 1050;
     const userResponsesItems = getUserResponses();
-    const livesCount = 1;
-    const expectedScore = 1050;
 
     // Act
-    const resultScore = scoring.getCompletionScore(userResponsesItems, livesCount);
+    const resultScore = scoring.getCompletionScore(userResponsesItems, LIVES_COUNT);
 
     // Assert
-    assert.ok(resultScore === expectedScore, `expected game score = ${expectedScore}, but received ${resultScore}`);
+    assert.ok(resultScore === EXPECTED_SCORE, `expected game score = ${EXPECTED_SCORE}, but received ${resultScore}`);
   });
 
   it(`is failed when all responses, each response right, less than 1 live saved, speed of each normal.`, () => {
     // Arrange
+    const LIVES_COUNT = 0;
     const userResponsesItems = getUserResponses();
-    const livesCount = 0;
 
     // Act
-    const resultScore = scoring.getCompletionScore(userResponsesItems, livesCount);
+    const resultScore = scoring.getCompletionScore(userResponsesItems, LIVES_COUNT);
 
     // Assert
     assert.ok(expect.game.failed(resultScore), `expected game failed: score = ${resultScore}.`);
@@ -94,43 +97,43 @@ describe(`Game scoring:`, () => {
 
   it(`is success when all responses, each response right, all lives saved, speed of each fast.`, () => {
     // Arrange
-    const userResponsesItems = getUserResponses(void 0, void 0, gameConventions.responseSpeed.fast);
-    const livesCount = gameSettings.totalLivesCount;
-    const expectedScore = 1650;
+    const LIVES_COUNT = TotalCount.LIVES;
+    const EXPECTED_SCORE = 1650;
+    const userResponsesItems = getUserResponses(void 0, void 0, SpeedType.FAST);
 
     // Act
-    const resultScore = scoring.getCompletionScore(userResponsesItems, livesCount);
+    const resultScore = scoring.getCompletionScore(userResponsesItems, LIVES_COUNT);
 
     // Assert
-    assert.ok(resultScore === expectedScore, `expected game score = ${expectedScore}, but received ${resultScore}`);
+    assert.ok(resultScore === EXPECTED_SCORE, `expected game score = ${EXPECTED_SCORE}, but received ${resultScore}`);
   });
 
   it(`is success when all responses, each response right, all lives saved, speed of each slow.`, () => {
     // Arrange
-    const userResponsesItems = getUserResponses(void 0, void 0, gameConventions.responseSpeed.slow);
-    const livesCount = gameSettings.totalLivesCount;
-    const expectedScore = 650;
+    const LIVES_COUNT = TotalCount.LIVES;
+    const EXPECTED_SCORE = 650;
+    const userResponsesItems = getUserResponses(void 0, void 0, SpeedType.SLOW);
 
     // Act
-    const resultScore = scoring.getCompletionScore(userResponsesItems, livesCount);
+    const resultScore = scoring.getCompletionScore(userResponsesItems, LIVES_COUNT);
 
     // Assert
-    assert.ok(resultScore === expectedScore, `expected game score = ${expectedScore}, but received ${resultScore}`);
+    assert.ok(resultScore === EXPECTED_SCORE, `expected game score = ${EXPECTED_SCORE}, but received ${resultScore}`);
   });
 
   it(`is success when all responses, first 2 response wrong other right, all lives saved, speed of each normal.`, () => {
     // Arrange
+    const livesCount = TotalCount.LIVES;
+    const EXPECTED_SCORE = 950;
     const userResponsesItems = getUserResponses().map((it, index) => {
-      it.isRight = index > 1;
+      it.resultType = index > 1 ? ResultType.RIGHT : ResultType.WRONG;
       return it;
     });
-    const livesCount = gameSettings.totalLivesCount;
-    const expectedScore = 950;
 
     // Act
     const resultScore = scoring.getCompletionScore(userResponsesItems, livesCount);
 
     // Assert
-    assert.ok(resultScore === expectedScore, `expected game score = ${expectedScore}, but received ${resultScore}`);
+    assert.ok(resultScore === EXPECTED_SCORE, `expected game score = ${EXPECTED_SCORE}, but received ${resultScore}`);
   });
 });
