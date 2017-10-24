@@ -4,23 +4,33 @@ import gameConventions from '../config/game-conventions.js';
 import gameSettings from '../config/game-settings.js';
 import levelsFactory from './levels-factory.js';
 import scoring from '../logic/scoring.js';
+import Timer from '../logic/timer.js';
 
 const {ResultType, SpeedType, ScoreLimits} = gameConventions;
 const {TotalCount, TimeSteps} = gameSettings;
 
 
 const createGameState = function (playerName) {
-  return {
+  const state = {
+    _time: TotalCount.TIME,
     player: {
       name: playerName
     },
     livesCount: TotalCount.LIVES,
-    time: 0.5 * TotalCount.TIME,
+    get time() {
+      return state._time;
+    },
+    set time(value) {
+      state._time = value;
+      state.onChanged({target: `time`});
+    },
     levelNumber: 0,
     level: {},
     answers: [],
     isComplete: false,
+    onChanged: () => {},
   };
+  return state;
 };
 
 const createGameAnswer = function (answerCode, isRight, time) {
@@ -62,6 +72,8 @@ let _levels;
 const _results = [];
 
 const gameState = {
+  _timerId: null,
+  _timer: {},
   get state() {
     return _state;
   },
@@ -75,8 +87,29 @@ const gameState = {
     _state = createGameState(playerName);
     _levels = levelsFactory.createLevels();
     _state.level = _levels[_state.levelNumber];
+    gameState._timer = new Timer(TotalCount.TIME, () => {
+      gameState.state.time = gameState._timer.getTicksCount();
+      gameState.onTimeout();
+    });
+    gameState._startTimer();
+  },
+  _startTimer: () => {
+    gameState._timerId = setTimeout(gameState._restartTimer, 1000);
+  },
+  _restartTimer: () => {
+    const timer = gameState._timer;
+    gameState._timerId = null;
+    timer.tick();
+    if (timer === gameState._timer) {
+      gameState.state.time = gameState._timer.getTicksCount();
+      gameState._startTimer();
+    }
   },
   completeLevel: (answerCode) => {
+    if (gameState._timerId) {
+      clearTimeout(gameState._timerId);
+      gameState._timerId = null;
+    }
     if (!_state || _state.isComplete) {
       return;
     }
@@ -92,14 +125,20 @@ const gameState = {
     if (_state.livesCount < 0 || levelNumber === _levels.length) {
       gameState.completeGame();
     }
+    _state.onChanged = () => {};
     _state.levelNumber = levelNumber;
     _state.level = _levels[levelNumber];
+    _state.time = TotalCount.TIME;
+
+    gameState._timer = new Timer(TotalCount.TIME, gameState.onTimeout);
+    gameState._startTimer();
   },
   completeGame: () => {
     const gameResult = createGameResult(_state);
     _results.unshift(gameResult);
     _state.isComplete = true;
-  }
+  },
+  onTimeout: () => {}
 };
 
 export default gameState;

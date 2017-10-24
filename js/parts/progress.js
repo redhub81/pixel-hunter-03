@@ -1,22 +1,15 @@
 /** @module parts/stats */
 
+import ProgressView from './progress-view.js';
 import gameConventions from '../config/game-conventions.js';
 import gameSettings from '../config/game-settings.js';
-import contentBuilder from '../content-builder.js';
 
 const {ResultType, SpeedType} = gameConventions;
 const {TotalCount} = gameSettings;
 
 
-const getStatusTemplate = (model) => `<li class="stats__result stats__result--${model}"></li>`;
-
-const getStatusesTemplate = (statuses) => `\
-    <ul class="stats">
-      ${statuses.map(getStatusTemplate).join(`\n`)}
-    </ul>`;
-
 const getStatus = (answer) => {
-  if (!answer || answer.isRight === null) {
+  if (!answer || typeof answer.resultType === `undefined`) {
     return `unknown`;
   }
   if (answer.resultType === ResultType.WRONG) {
@@ -34,17 +27,15 @@ const getStatuses = (answers) => {
   return answers.concat(unknownAnswers).map(getStatus);
 };
 
-/* Экспорт интерфейса модуля.
- *************************************************************************************************/
-
-export default {
+const screen = {
   /** Возвращает шаблон представления прогресса прохождения игры.
    * @param {object} answers - Ответы пользователя.
-   * @return {object} - Шаблон части содержимого игрового экрана.
+   * @return {string} - Шаблон части содержимого игрового экрана.
    */
   getTemplate: (answers) => {
     const statuses = getStatuses(answers);
-    return getStatusesTemplate(statuses);
+    const view = new ProgressView(statuses);
+    return view.template;
   },
   /**
    * Возвращает содержимое представления прогресса прохождения игры.
@@ -54,8 +45,12 @@ export default {
    */
   getContent: (answers) => {
     const statuses = getStatuses(answers);
-    const statusTemplate = getStatusTemplate(statuses);
-
-    return contentBuilder.build(statusTemplate);
+    const view = new ProgressView(statuses);
+    return view.element;
   }
 };
+
+/* Экспорт интерфейса модуля.
+ *************************************************************************************************/
+
+export default screen;
