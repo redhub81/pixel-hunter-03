@@ -124,6 +124,7 @@ const gameState = {
     const levelNumber = _state.levelNumber + 1;
     if (_state.livesCount < 0 || levelNumber === _levels.length) {
       gameState.completeGame();
+      return;
     }
     _state.onChanged = () => {};
     _state.levelNumber = levelNumber;
