@@ -17,10 +17,14 @@ const getCompletionScore = (answers, livesCount) => {
   if (!answers || answers.length < TotalCount.QUESTIONS) {
     return ScoreLimits.FAILED;
   }
-  if (!livesCount || livesCount < 1) {
+  if (livesCount < 0) {
     return ScoreLimits.FAILED;
   }
   const levelsStatistic = getLevelsStatistic(answers);
+  if (levelsStatistic[ResultType.WRONG].count > TotalCount.LIVES) {
+    return ScoreLimits.FAILED;
+  }
+
   const speedStatistic = getSpeedStatistic(answers);
 
   let totalPoints = levelsStatistic[ResultType.RIGHT].points;
@@ -51,7 +55,9 @@ const getLevelsStatistic = (answers) => {
 };
 
 const getSpeedStatistic = (answers) => {
-  const speedTypes = answers.map((it) => it.speed);
+  const speedTypes = answers
+      .filter((it) => it.resultType === ResultType.RIGHT)
+      .map((it) => it.speed);
   const statisticKeys = Object.keys(SpeedType)
       .map((key) => SpeedType[key]);
   return getStatistic(speedTypes, statisticKeys, SpeedScore);

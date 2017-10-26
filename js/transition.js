@@ -81,7 +81,7 @@ const goToGameScreen = (screen, model) => {
       selectors.forEach((it) => {
         contentPresenter.update(it, (element) => {
           const time = model.time;
-          element.innerText = time.toString();
+          element.textContent = time.toString();
           if (time === TimeSteps.WARNING) {
             element.classList.add(`blink`);
           }

@@ -55,6 +55,8 @@ const ResultType = {
  * @enum {string}
  */
 const SpeedType = {
+  /** Cкорость неизвестна. */
+  UNKNOWN: `UNKNOWN`,
   /** Нормальная скорость. */
   NORMAL: `NORMAL`,
   /** Быстрый ответ. */
