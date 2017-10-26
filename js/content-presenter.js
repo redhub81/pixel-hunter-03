@@ -19,6 +19,11 @@ const show = function (screen, model) {
   mainContentElement.appendChild(screenContent);
 };
 
+const update = function (selector, callback) {
+  const element = mainContentElement.querySelector(selector);
+  callback(element);
+};
+
 /* Экспорт интерфейса модуля.
  *************************************************************************************************/
 
@@ -34,5 +39,12 @@ export default {
    * @param {object} screen - Игровой экран.
    * @param {object} model - Модель данных.
    */
-  show
+  show,
+  /**
+   * Обновляет текстовое содержимое игрового экрана.
+   * @function
+   * @param {string} selector - Селектор элемента для обновления.
+   * @param {string} text - Новое текстовое содержимое.
+   */
+  update,
 };

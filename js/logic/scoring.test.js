@@ -83,9 +83,9 @@ describe(`Game scoring:`, () => {
     assert.ok(resultScore === EXPECTED_SCORE, `expected game score = ${EXPECTED_SCORE}, but received ${resultScore}`);
   });
 
-  it(`is failed when all responses, each response right, less than 1 live saved, speed of each normal.`, () => {
+  it(`is failed when all responses, each response right, less than 0 live saved, speed of each normal.`, () => {
     // Arrange
-    const LIVES_COUNT = 0;
+    const LIVES_COUNT = -1;
     const userResponsesItems = getUserResponses();
 
     // Act
@@ -93,6 +93,37 @@ describe(`Game scoring:`, () => {
 
     // Assert
     assert.ok(expect.game.failed(resultScore), `expected game failed: score = ${resultScore}.`);
+  });
+
+  it(`is failed when all responses, first 6 response right, 0 live saved, speed of each normal.`, () => {
+    // Arrange
+    const LIVES_COUNT = 0;
+    const userResponsesItems = getUserResponses().map((it, index) => {
+      it.resultType = index < 6 ? ResultType.RIGHT : ResultType.WRONG;
+      return it;
+    });
+
+    // Act
+    const resultScore = scoring.getCompletionScore(userResponsesItems, LIVES_COUNT);
+
+    // Assert
+    assert.ok(expect.game.failed(resultScore), `expected game failed: score = ${resultScore}.`);
+  });
+
+  it(`is success when all responses, first 7 response right, 0 live saved, speed of each normal.`, () => {
+    // Arrange
+    const LIVES_COUNT = 0;
+    const EXPECTED_SCORE = 700;
+    const userResponsesItems = getUserResponses().map((it, index) => {
+      it.resultType = index < 7 ? ResultType.RIGHT : ResultType.WRONG;
+      return it;
+    });
+
+    // Act
+    const resultScore = scoring.getCompletionScore(userResponsesItems, LIVES_COUNT);
+
+    // Assert
+    assert.ok(resultScore === EXPECTED_SCORE, `expected game score = ${EXPECTED_SCORE}, but received ${resultScore}`);
   });
 
   it(`is success when all responses, each response right, all lives saved, speed of each fast.`, () => {
@@ -127,6 +158,57 @@ describe(`Game scoring:`, () => {
     const EXPECTED_SCORE = 950;
     const userResponsesItems = getUserResponses().map((it, index) => {
       it.resultType = index > 1 ? ResultType.RIGHT : ResultType.WRONG;
+      return it;
+    });
+
+    // Act
+    const resultScore = scoring.getCompletionScore(userResponsesItems, livesCount);
+
+    // Assert
+    assert.ok(resultScore === EXPECTED_SCORE, `expected game score = ${EXPECTED_SCORE}, but received ${resultScore}`);
+  });
+
+  it(`is success when all responses, first 2 response wrong other right, all lives saved, speed of each fast.`, () => {
+    // Arrange
+    const livesCount = TotalCount.LIVES;
+    const EXPECTED_SCORE = 1350;
+    const userResponsesItems = getUserResponses().map((it, index) => {
+      it.resultType = index > 1 ? ResultType.RIGHT : ResultType.WRONG;
+      it.speed = SpeedType.FAST;
+      return it;
+    });
+
+    // Act
+    const resultScore = scoring.getCompletionScore(userResponsesItems, livesCount);
+
+    // Assert
+    assert.ok(resultScore === EXPECTED_SCORE, `expected game score = ${EXPECTED_SCORE}, but received ${resultScore}`);
+  });
+
+  it(`is success when all responses, first 2 response wrong other right, all lives saved, speed of each slow.`, () => {
+    // Arrange
+    const livesCount = TotalCount.LIVES;
+    const EXPECTED_SCORE = 550;
+    const userResponsesItems = getUserResponses().map((it, index) => {
+      it.resultType = index > 1 ? ResultType.RIGHT : ResultType.WRONG;
+      it.speed = SpeedType.SLOW;
+      return it;
+    });
+
+    // Act
+    const resultScore = scoring.getCompletionScore(userResponsesItems, livesCount);
+
+    // Assert
+    assert.ok(resultScore === EXPECTED_SCORE, `expected game score = ${EXPECTED_SCORE}, but received ${resultScore}`);
+  });
+
+  it(`is success when all responses, first 2 response wrong with unknown speed other right with slow speed, 2 lives saved.`, () => {
+    // Arrange
+    const livesCount = 2;
+    const EXPECTED_SCORE = 500;
+    const userResponsesItems = getUserResponses().map((it, index) => {
+      it.resultType = index > 1 ? ResultType.RIGHT : ResultType.WRONG;
+      it.speed = index > 1 ? SpeedType.SLOW : SpeedType.UNKNOWN;
       return it;
     });
 
