@@ -33,7 +33,7 @@ describe(`Timer.tick() method:`, () => {
     let timer = new Timer(INITIAL_TICKS_COUNT, () => {});
 
     // Act and assert
-    let ticksCount = timer.getTicksCount();
+    let ticksCount = timer.ticksCount;
     assert.ok(typeof ticksCount === `number`, `expected ticksCount is a number.`);
 
     // Act and assert
@@ -41,7 +41,7 @@ describe(`Timer.tick() method:`, () => {
       // Act
       timer.tick();
       const oldTicksCount = ticksCount;
-      ticksCount = timer.getTicksCount();
+      ticksCount = timer.ticksCount;
 
       // Assert
       assert.ok(oldTicksCount - ticksCount === 1,
@@ -59,7 +59,7 @@ describe(`Timer.tick() method:`, () => {
     // Act
     const ticksCountValues = new Array(ITERATIONS).fill(null).map(() => {
       timer.tick();
-      return timer.getTicksCount();
+      return timer.ticksCount;
     });
 
     // Assert
