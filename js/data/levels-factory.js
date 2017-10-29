@@ -2,9 +2,9 @@
 
 import gameConventions from '../config/game-conventions.js';
 import gameSettings from '../config/game-settings.js';
-import mathHelper from './math-helper';
+import mathHelper from '../helpers/math-helper';
 import imagesRepository from './images-repository.js';
-import answerEncoder from '../logic/answer-encoder.js';
+import answerEncoder from './answer-encoder.js';
 
 const {LevelType, ImageType} = gameConventions;
 const {TotalCount} = gameSettings;

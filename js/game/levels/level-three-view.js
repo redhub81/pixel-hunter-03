@@ -1,11 +1,14 @@
 /** @module screens/game-three-view */
 
-import AbstractView from '../abstract-view';
-import progress from '../parts/progress.js';
+import gameConventions from '../../config/game-conventions.js';
+import {raiseEvent} from '../../helpers/event-helper';
+import contentPresenter from '../../content-presenter.js';
+import AbstractView from '../../abstract-view.js';
+import ProgressView from "../../views/progress-view";
+import answerEncoder from '../../data/answer-encoder.js';
 
+const {LevelType, ImageType} = gameConventions;
 
-/* Экспорт интерфейса модуля.
- *************************************************************************************************/
 
 /*
  * Представление типа игры с тремя изображениями.
@@ -16,6 +19,9 @@ export default class GameThreeView extends AbstractView {
    */
   constructor(model) {
     super(model);
+    this._selectTypes = model.level.type === LevelType.PHOTO_AMONG_THREE_IMAGES
+      ? [ImageType.PHOTO, ImageType.PAINTING]
+      : [ImageType.PAINTING, ImageType.PHOTO];
   }
   /**
    * Ищет родительский элемент удовлетворяющий условию.
@@ -48,13 +54,13 @@ export default class GameThreeView extends AbstractView {
         <form class="game__content  game__content--triple">
           ${this.model.level.images.map((it) => GameThreeView._getOptionTemplate(it)).join(`\n`)}
         </form>
-        <div class="stats">
-          ${progress.getTemplate(this.model.answers)}
-        </div>
+        <div class="stats"></div>
       </div>`;
   }
   /** Выполняет подписку на события. */
   bind() {
+    this._statsContainer = this.element.querySelector(`.stats`);
+
     const gameContentElement = this._element.querySelector(`.game__content`);
     let mousedownOptionElement;
 
@@ -74,15 +80,24 @@ export default class GameThreeView extends AbstractView {
       const mouseupOptionElement = findParentGameOption(evt.target, gameContentElement);
       if (mousedownOptionElement && mouseupOptionElement && mousedownOptionElement === mouseupOptionElement) {
         const optionElements = Array.from(gameContentElement.querySelectorAll(`.game__option`));
+        const targetIndex = optionElements.indexOf(mouseupOptionElement);
+
+        const answers = [0, 1, 2].map((it, index) => {
+          return index === targetIndex ? this._selectTypes[0] : this._selectTypes[1];
+        });
         const data = {
-          index: optionElements.indexOf(mouseupOptionElement),
-          value: ``
+          answerCode: answerEncoder.encode(answers)
         };
-        this.onResponse(data);
+        raiseEvent(this.onAnswer, data);
       }
     });
   }
+  update() {
+    const progressView = new ProgressView(this._model.state.answers);
+    contentPresenter.change(progressView, this._statsContainer);
+    this._progressView = progressView;
+  }
   /** Вызывается при переходе на следующий уровень. */
-  onResponse() {
+  onAnswer() {
   }
 }

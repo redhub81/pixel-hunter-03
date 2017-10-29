@@ -1,14 +1,14 @@
 /** @module screens/game-two-view */
 
-import AbstractView from '../abstract-view';
-import gameConventions from '../config/game-conventions.js';
-import progress from '../parts/progress.js';
+import gameConventions from '../../config/game-conventions.js';
+import contentPresenter from '../../content-presenter.js';
+import {raiseEvent} from '../../helpers/event-helper';
+import AbstractView from '../../abstract-view.js';
+import ProgressView from "../../views/progress-view";
+import answerEncoder from '../../data/answer-encoder.js';
 
 const {ImageType} = gameConventions;
 
-
-/* Экспорт интерфейса модуля.
- *************************************************************************************************/
 
 /*
  * Представление типа игры с одним изображением.
@@ -38,26 +38,31 @@ export default class GameTwoView extends AbstractView {
             </label>
           </div>
         </form>
-        <div class="stats">
-          ${progress.getTemplate(this.model.answers)}
-        </div>
+        <div class="stats"></div>
       </div>`;
   }
   /** Выполняет подписку на события. */
   bind() {
+    this._statsContainer = this.element.querySelector(`.stats`);
+
     const gameContentElement = this._element.querySelector(`.game__content`);
     gameContentElement.addEventListener(`change`, (evt) => {
       const target = evt.target;
       if (target.type === `radio`) {
+        const answers = [target.value];
         const data = {
-          index: 0,
-          value: target.value,
+          answerCode: answerEncoder.encode(answers)
         };
-        this.onResponse(data);
+        raiseEvent(this.onAnswer, data);
       }
     });
   }
+  update() {
+    const progressView = new ProgressView(this._model.state.answers);
+    contentPresenter.change(progressView, this._statsContainer);
+    this._progressView = progressView;
+  }
   /** Вызывается при переходе на следующий уровень. */
-  onResponse() {
+  onAnswer() {
   }
 }

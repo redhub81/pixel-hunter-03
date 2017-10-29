@@ -1,6 +1,8 @@
 /** @module screens/greeting-view */
 
-import AbstractView from '../abstract-view';
+import contentPresenter from '../../content-presenter.js';
+import AbstractView from '../../abstract-view.js';
+import FooterView from '../../views/footer-view';
 
 export default class GreetingView extends AbstractView {
   /** Конструктор.
@@ -23,17 +25,27 @@ export default class GreetingView extends AbstractView {
             Помни, главное — смотреть очень внимательно.</p>
         </div>
         <div class="greeting__continue"><span><img src="img/arrow_right.svg" width="64" height="64" alt="Next"></span></div>
-      </div>`;
+      </div>
+      <div class="footer-container"/>`;
   }
   /** Выполняет подписку на события. */
   bind() {
-    const continueElement = this._element.querySelector(`.greeting__continue`);
+    this._footerContainer = this.element.querySelector(`.footer-container`);
 
+    const continueElement = this.element.querySelector(`.greeting__continue`);
     continueElement.addEventListener(`click`, () => {
-      this.onContinueClicked();
+      this.onContinue();
     });
   }
+  update() {
+    this.updateFooter();
+  }
+  updateFooter() {
+    const footerView = new FooterView(null);
+    contentPresenter.change(footerView, this._footerContainer);
+    this._footerView = footerView;
+  }
   /** Вызывается при переходе на следующий уровень. */
-  onContinueClicked() {
+  onContinue() {
   }
 }

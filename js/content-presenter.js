@@ -2,49 +2,37 @@
 
 const mainContentElement = document.querySelector(`main.central`);
 
-/**
- * Оцищает контейнер отображения.
- */
-const clear = function () {
-  mainContentElement.innerHTML = ``;
-};
-
-/**
- * Отображает игровой экран на странице.
- * @param {object} screen - Игровой экран.
- * @param {object} model - Модель данных.
- */
-const show = function (screen, model) {
-  const screenContent = screen.getContent(model);
-  mainContentElement.appendChild(screenContent);
-};
-
-const update = function (selector, callback) {
-  const element = mainContentElement.querySelector(selector);
-  callback(element);
-};
-
-/* Экспорт интерфейса модуля.
- *************************************************************************************************/
-
 export default {
-  /**
-   * Оцищает контейнер отображения.
-   * @function
+  /** Оцищает контейнер отображения.
+   * @param {object} container - Контейнер отображения.
    */
-  clear,
+  clear: (container = mainContentElement) => {
+    container.innerHTML = ``;
+  },
   /**
    * Отображает игровой экран на странице.
-   * @function
-   * @param {object} screen - Игровой экран.
-   * @param {object} model - Модель данных.
+   * @param {object} view - Игровой экран.
+   * @param {object} container - Контейнер отображения.
    */
-  show,
+  show: (view, container = mainContentElement) => {
+    container.appendChild(view.element);
+  },
+  /**
+   * Отображает игровой экран на странице.
+   * @param {object} view - Игровой экран.
+   * @param {object} container - Контейнер отображения.
+   */
+  change: (view, container = mainContentElement) => {
+    container.innerHTML = ``;
+    container.appendChild(view.element);
+  },
   /**
    * Обновляет текстовое содержимое игрового экрана.
-   * @function
-   * @param {string} selector - Селектор элемента для обновления.
-   * @param {string} text - Новое текстовое содержимое.
+   * @param {string} selector - Селектор целевого элемента для обновления.
+   * @param {function} callback - Функция обратного вызова, выполняющая обновление целевого элемента.
    */
-  update,
+  update: (selector, callback) => {
+    const element = mainContentElement.querySelector(selector);
+    callback(element);
+  },
 };

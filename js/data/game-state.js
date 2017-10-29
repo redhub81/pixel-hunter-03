@@ -100,7 +100,7 @@ const gameState = {
     timer.start();
   },
   completeLevel: (answerCode) => {
-    timer.stop();
+    timer.stopTimer();
     if (!state || state.isComplete) {
       return;
     }

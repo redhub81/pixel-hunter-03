@@ -1,11 +1,6 @@
 /** @module main */
 
-import imagesRepository from './data/images-repository.js';
-import transition from './transition.js';
+import Application from './application.js';
 
-imagesRepository.loadImages(() => {
-  transition.init();
-  transition.goToStartScreen();
-});
-
-
+Application.init();
+Application.showIntro();
