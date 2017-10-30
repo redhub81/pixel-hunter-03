@@ -65,8 +65,13 @@ const SpeedType = {
   SLOW: `SLOW`,
 };
 
-/* Экспорт интерфейса модуля.
- *************************************************************************************************/
+const ScreenId = {
+  INTRO: `intro`,
+  GREETING: `greeting`,
+  RULES: `rules`,
+  GAME: `game`,
+  STATS: `stats`,
+};
 
 export default {
   ScoreLimits,
@@ -75,4 +80,5 @@ export default {
   ImageType,
   LevelType,
   ImageCode,
+  ScreenId,
 };

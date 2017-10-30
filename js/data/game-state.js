@@ -92,16 +92,15 @@ const gameState = {
     state.level = levels[levelNumber];
 
     timer = new Timer(TotalCount.TIME, () => {
-      state.time = timer.getTicksCount();
+      state.time = timer.ticksCount;
       gameState.onTimeout();
-    });
-    timer.onTick = (tick) => {
+    }, (tick) => {
       state.time = tick;
-    };
+    });
     timer.start();
   },
   completeLevel: (answerCode) => {
-    timer.stop();
+    timer.stopTimer();
     if (!state || state.isComplete) {
       return;
     }
@@ -122,7 +121,7 @@ const gameState = {
     state.levelNumber = levelNumber;
     state.level = levels[levelNumber];
     state.time = TotalCount.TIME;
-    timer.setTicksCount(TotalCount.TIME);
+    timer.ticksCount = TotalCount.TIME;
     timer.start();
   },
   completeGame: () => {

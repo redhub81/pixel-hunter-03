@@ -1,7 +1,11 @@
 /** @module screens/rules-view */
 
-import AbstractView from '../abstract-view';
-import gameSettings from '../config/game-settings.js';
+import AbstractView from '../../abstract-view.js';
+import gameSettings from '../../config/game-settings.js';
+import contentPresenter from '../../content-presenter.js';
+import HeaderView from '../../views/header-view';
+import FooterView from '../../views/footer-view';
+import {raiseEvent} from "../../helpers/event-helper";
 
 const {TotalCount} = gameSettings;
 
@@ -14,6 +18,7 @@ export default class RulesView extends AbstractView {
   /** Геттер template создает разметку экрана */
   get template() {
     return `\
+      <div class="header-container"></div>
       <div class="rules">
         <h1 class="rules__title">Правила</h1>
         <p class="rules__description">Угадай ${TotalCount.QUESTIONS} раз для каждого изображения фото <img
@@ -29,10 +34,15 @@ export default class RulesView extends AbstractView {
           <input class="rules__input" type="text" placeholder="Ваше Имя">
           <button class="rules__button  continue" type="submit" disabled>Go!</button>
         </form>
-      </div>`;
+      </div>
+      <div class="footer-container"></div>`;
   }
   /** Выполняет подписку на события. */
   bind() {
+    this._headerContainer = this.element.querySelector(`.header-container`);
+    this._footerContainer = this.element.querySelector(`.footer-container`);
+    this._playerNameInputElement = this.element.querySelector(`input.rules__input`);
+
     const rulesFormElement = this._element.querySelector(`.rules__form`);
     const rulesInputElement = rulesFormElement.querySelector(`.rules__input`);
     const rulesButtonElement = rulesFormElement.querySelector(`.rules__button.continue`);
@@ -51,12 +61,32 @@ export default class RulesView extends AbstractView {
         return;
       }
       const data = {
-        userName: rulesInputElement.value.toString()
+        playerName: rulesInputElement.value.toString()
       };
-      this.onResponse(data);
+      raiseEvent(this.onResponse, data);
     });
+  }
+  update() {
+    this.updateHeader();
+    this.updateFooter();
+  }
+  updateHeader() {
+    const headerView = new HeaderView(null);
+    contentPresenter.change(headerView, this._headerContainer);
+    this._headerView = headerView;
+    this._headerView.onBackClicked = () => raiseEvent(this.onGoBack);
+  }
+  updateFooter() {
+    const footerView = new FooterView(null);
+    contentPresenter.change(footerView, this._footerContainer);
+    this._footerView = footerView;
+  }
+  focus() {
+    this._playerNameInputElement.focus();
   }
   /** Вызывается в ответ на ввод данных пользователем. */
   onResponse() {
+  }
+  onGoBack() {
   }
 }

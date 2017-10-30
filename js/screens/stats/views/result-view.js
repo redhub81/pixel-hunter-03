@@ -1,18 +1,16 @@
-/** @module screens/stats-view */
+/** @module screens/result-view */
 
-import AbstractView from '../abstract-view';
-import gameConventions from '../config/game-conventions.js';
-import gameSettings from '../config/game-settings.js';
-import progress from '../parts/progress.js';
+import gameConventions from '../../../config/game-conventions';
+import gameSettings from '../../../config/game-settings';
+import contentPresenter from '../../../content-presenter.js';
+import AbstractView from '../../../abstract-view';
+import ProgressView from "../../../views/progress-view";
 
 const {ResultType, SpeedType} = gameConventions;
 const {AnswerScore, SpeedScore, AccuracyScore} = gameSettings;
 
 
-/* Экспорт интерфейса модуля.
- *************************************************************************************************/
-
-export default class StatsView extends AbstractView {
+export default class ResultView extends AbstractView {
   /** Конструктор.
    * @param {object} model - модель данных.
    */
@@ -60,26 +58,22 @@ export default class StatsView extends AbstractView {
       <table class="result__table">
         <tr>
           <td class="result__number">${number}.</td>
-          <td colspan="2">
-            ${progress.getTemplate(data.answers)}
-          </td>
+          <td colspan="2" class="stats-container"></td>
           <td class="result__points">×&nbsp;${AnswerScore.RIGHT}</td>
           <td class="result__total">${data.levelsStatistic[ResultType.RIGHT].points}</td>
         </tr>
-        ${!data.speedStatistic[SpeedType.FAST].points ? `` : StatsView._getSpeedFastBonusTemplate(data.speedStatistic[SpeedType.FAST])}
-        ${!data.livesStatistic.points ? `` : StatsView._getLiveBonusTemplate(data.livesStatistic)}
-        ${!data.speedStatistic[SpeedType.SLOW].points ? `` : StatsView._getSpeedSlowFineTemplate(data.speedStatistic[SpeedType.SLOW])}
-        ${StatsView._getTotalPointsTemplate(data.totalPoints)}
+        ${!data.speedStatistic[SpeedType.FAST].points ? `` : ResultView._getSpeedFastBonusTemplate(data.speedStatistic[SpeedType.FAST])}
+        ${!data.livesStatistic.points ? `` : ResultView._getLiveBonusTemplate(data.livesStatistic)}
+        ${!data.speedStatistic[SpeedType.SLOW].points ? `` : ResultView._getSpeedSlowFineTemplate(data.speedStatistic[SpeedType.SLOW])}
+        ${ResultView._getTotalPointsTemplate(data.totalPoints)}
       </table>`;
   }
-  static _getGameFailedStatTemplate(number, data) {
+  static _getGameFailedStatTemplate(number) {
     return `\
       <table class="result__table">
         <tr>
           <td class="result__number">${number}.</td>
-          <td>
-            ${progress.getTemplate(data.answers)}
-          </td>
+          <td class="stats-container"></td>
           <td class="result__total"></td>
           <td class="result__total  result__total--final">fail</td>
         </tr>
@@ -87,15 +81,18 @@ export default class StatsView extends AbstractView {
   }
   /** Геттер template создает разметку экрана */
   get template() {
-    const results = this.model;
+    const {result, number} = this.model;
     return `\
-      <div class="result">
-        <h1>${results[0].resultType === ResultType.RIGHT ? `Победа!` : `Поражение!`}</h1>
-        ${results
-      .map((result, index) => result.resultType === ResultType.RIGHT
-        ? StatsView._getGameSuccessStatTemplate(index + 1, result)
-        : StatsView._getGameFailedStatTemplate(index + 1, result))
-      .join(`\n`)}
-      </div>`;
+      ${result.resultType === ResultType.RIGHT
+    ? ResultView._getGameSuccessStatTemplate(number, result)
+    : ResultView._getGameFailedStatTemplate(number)}`;
+  }
+  bind() {
+    this._statsContainer = this.element.querySelector(`.stats-container`);
+  }
+  update() {
+    const progressView = new ProgressView(this._model.result.answers);
+    contentPresenter.change(progressView, this._statsContainer);
+    this._progressView = progressView;
   }
 }

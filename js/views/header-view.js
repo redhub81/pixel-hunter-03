@@ -50,10 +50,18 @@ export default class HeaderView extends AbstractView {
   }
   /** Выполняет подписку на события. */
   bind() {
-    const backElement = this._element.querySelector(`.back`);
+    const backElement = this.element.querySelector(`.back`);
+    this._timeElement = this.element.querySelector(`.game__timer`);
+
     backElement.addEventListener(`click`, () => {
       this.onBackClicked();
     });
+  }
+  updateTimeBar(value) {
+    this._timeElement.textContent = value.toString();
+  }
+  beginTimeBlinking() {
+    this._timeElement.classList.add(`blink`);
   }
   /** Вызывается при переходе на следующий уровень. */
   onBackClicked() {

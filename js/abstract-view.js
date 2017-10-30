@@ -1,10 +1,6 @@
-/** @module screens/abstract-view */
+/** @module abstract-view */
 
 import contentBuilder from './content-builder.js';
-
-
-/* Экспорт интерфейса модуля.
- *************************************************************************************************/
 
 /**
  * Абстрактный базовый класс для представлений.
@@ -22,28 +18,27 @@ export default class AbstractView {
   get model() {
     return this._model;
   }
-  /** Задает модель данных.
-   * @param {object} value - Модель данных.
-   */
-  set model(value) {
-    this._model = value;
-  }
   /** Геттер template возвращает шаблон разметки.
    * Метод абстрактный. Должен быть переопределен в объектах-наследниках.
-   * @return {string} - Строка, содержащая шаблон разметки.
    */
   get template() {
-    return ``;
+    throw new Error(`You have to define template for view.`);
   }
   /** Создает представление на основе шаблона.
    * @model - модель данных.
    */
   render() {
-    this._element = contentBuilder.build(this.template);
+    this._element = contentBuilder.build(this.template.trim());
   }
   /** Выполняет подписку на события.
-   * Базовая реализация ничего не делает. */
+   * Предназначен для переорпеделения в производных классах.
+   */
   bind() {
+  }
+  /** Обновляет представление.
+   * Предназначен для переорпеделения в производных классах.
+   */
+  update() {
   }
   /** Создает и инициализирует представление.
    * @return {object} - корневой DOM-элемент представления. */

@@ -1,11 +1,12 @@
 /** @module data/images-repository */
 
 import gameConventions from '../config/game-conventions.js';
-import mathHelper from './math-helper.js';
+import mathHelper from '../helpers/math-helper.js';
 
 const {ImageType} = gameConventions;
 
 
+const LOAD_DELAY = 3000;
 const imageSourcePrefix = `imageSource`;
 const imageSourcesByType = {
   [`${imageSourcePrefix}${ImageType.PHOTO}`]: [
@@ -28,7 +29,7 @@ const imageSourcesByType = {
 
 export default {
   loadImages: (onLoadCallback) => {
-    onLoadCallback();
+    setTimeout(onLoadCallback, LOAD_DELAY);
   },
   getRandomImage(imageType) {
     const imageSource = imageSourcesByType[`${imageSourcePrefix}${imageType}`];
