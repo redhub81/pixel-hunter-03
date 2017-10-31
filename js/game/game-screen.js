@@ -10,6 +10,7 @@ import levelOneView from './levels/level-one-view.js';
 import levelTwoView from './levels/level-two-view.js';
 import levelThreeView from './levels/level-three-view.js';
 import resultsRepository from '../data/results-repository.js';
+import {gameStateEncoder} from "../data/game-data";
 
 const {TimeSteps} = gameSettings;
 const {LevelType} = gameConventions;
@@ -81,7 +82,11 @@ export default class GameScreen {
     this._view.update();
     this._model.restartTimer();
   }
-  init(stateData) {
+  init(stateCode) {
+    const stateData = gameStateEncoder.decode(stateCode);
+    if (!stateData) {
+      Application.showRules();
+    }
     this._model.newGame(stateData);
     contentPresenter.change(this._view);
     this._goToNextLevel();

@@ -66,7 +66,7 @@ const SpeedType = {
 };
 
 const ScreenId = {
-  INTRO: `intro`,
+  INTRO: ``,
   GREETING: `greeting`,
   RULES: `rules`,
   GAME: `game`,

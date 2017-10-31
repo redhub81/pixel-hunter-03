@@ -3,7 +3,7 @@
 import gameConventions from '../config/game-conventions';
 import gameSettings from '../config/game-settings';
 import {raiseEvent} from "../helpers/event-helper";
-import {initialStateData} from "../data/game-data";
+import {initialGameStateData} from "../data/game-data";
 import levelsFactory from '../data/levels-factory';
 import scoring from '../logic/scoring';
 import GameStateModel from './models/game-state-model';
@@ -65,7 +65,7 @@ export default class GameModel {
   get result() {
     return this._result;
   }
-  newGame(stateData = initialStateData) {
+  newGame(stateData = initialGameStateData) {
     this._timer.stop();
     this._isComplete = false;
     this._updateState(stateData);

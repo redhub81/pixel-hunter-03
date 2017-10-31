@@ -84,6 +84,9 @@ export default class RulesView extends AbstractView {
   focus() {
     this._playerNameInputElement.focus();
   }
+  set playerName(value) {
+    this._playerNameInputElement.value = value;
+  }
   /** Вызывается в ответ на ввод данных пользователем. */
   onResponse() {
   }
