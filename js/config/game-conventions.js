@@ -51,6 +51,13 @@ const ResultType = {
   WRONG: `WRONG`,
 };
 
+const ResultCode = {
+  WRONG: `wrong`,
+  CORRECT: `correct`,
+  FAST: `fast`,
+  SLOW: `slow`,
+};
+
 /** Скорость ответа.
  * @enum {string}
  */

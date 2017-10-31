@@ -63,7 +63,11 @@ export default class GameModel {
     return this._isComplete;
   }
   get result() {
+    this._result = createGameResult(this._state);
     return this._result;
+  }
+  get progress() {
+    return gameProgressEncoder.encode(this._state);
   }
   newGame(stateData = initialGameStateData) {
     this._timer.stop();
@@ -99,7 +103,6 @@ export default class GameModel {
     timer.ticksCount = TotalCount.TIME;
   }
   completeGame() {
-    this._result = createGameResult(this._state);
     this._isComplete = true;
   }
   restartTimer() {

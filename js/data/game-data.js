@@ -12,7 +12,7 @@ export const initialGameStateData = {
   answers: []
 };
 
-const getFieldData = (value, length, char) => {
+const getFieldData = (value, length, char = `0`) => {
   let strValue = value.toString();
   if (strValue.length === length) {
     return strValue;
@@ -32,7 +32,7 @@ const gameStateFields = {
 export const gameStateEncoder = {
   encode: (data) => {
     const fieldsData = Object.keys(gameStateFields)
-        .map((key) => getFieldData(data[key], gameStateFields[key], `0`))
+        .map((key) => getFieldData(data[key], gameStateFields[key]))
         .reduce((s, it) => {
           return s + it;
         }, ``);
@@ -50,5 +50,52 @@ export const gameStateEncoder = {
         });
     state.answers = [];
     return state;
+  }
+};
+
+
+const livesFieldEncoder = {
+  name: `livesCount`, 
+  itemSize: 1,
+  encode: (data) => getFieldData(data, livesFieldEncoder.itemSize),
+  decode: (code, data) => {
+    data[livesFieldEncoder.name] = code.substr(0, livesFieldEncoder.itemSize);
+    return code.substr(length);
+  }
+};
+
+const answersFieldEncoder = {
+  name: `answers`, 
+  headSize: 2,
+  itemSize: 1,
+  encode: (data) => `${getFieldData(answers.length, answersFieldEncoder.headSize)}${answers
+    .map((it) => getFieldData(it, answersFieldEncoder.itemSize))}`,
+  decode: (code, data) => {
+    const head = fieldsCode.substr(0, answersFieldEncoder.headSize);
+    const length = parseInt(head, 10);
+    answers = new Array(length).fill(null)
+      .map((it) => {
+        data[answersFieldEncoder.name] = code.substr(0, answersFieldEncoder.itemSize);
+        code = code.substr(0, answersFieldEncoder.itemSize);
+        return data;
+      });
+    return code;
+  }
+};
+
+const gameProgressFieldsEncoders = [livesFieldEncoder, answersFieldEncoder];
+
+export const gameProgressEncoder = {
+  encode: (data) => {
+    return Object.keys(gameProgressFieldsEncoders)
+        .map((it) => it.encode(data[it.name]))
+        .join(``);
+  }
+  decode: (code) => {
+    return Object.keys(gameProgressFieldsEncoders)
+      .reduce((data, it) => {
+        code = it.decode(code, data);
+        return data;
+      }, {});
   }
 };
