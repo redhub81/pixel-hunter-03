@@ -9,7 +9,7 @@ import GameView from './game-view.js';
 import levelOneView from './levels/level-one-view.js';
 import levelTwoView from './levels/level-two-view.js';
 import levelThreeView from './levels/level-three-view.js';
-import resultsRepository from '../data/results-repository.js';
+import {initialGameStateData} from "../data/game-data";
 
 const {TimeSteps} = gameSettings;
 const {LevelType} = gameConventions;
@@ -74,15 +74,16 @@ export default class GameScreen {
       gameModel.completeLevel(data.answerCode);
     }
     if (gameModel.isComplete) {
-      resultsRepository.saveResult(gameModel.result);
-      Application.showStats(gameModel.result);
+      // resultsRepository.saveResult(gameModel.result);
+      Application.showStats(gameModel.progress);
       return;
     }
     this._view.update();
     this._model.restartTimer();
   }
-  init(stateData) {
-    this._model.newGame(stateData);
+  init(playerName) {
+    const gameStateData = Object.assign({}, initialGameStateData, {playerName});
+    this._model.newGame(gameStateData);
     contentPresenter.change(this._view);
     this._goToNextLevel();
   }

@@ -2,7 +2,7 @@
 
 import contentPresenter from '../../content-presenter.js';
 import IntroView from './intro-view.js';
-import Application from "../../application.js";
+
 
 class IntroScreen {
   constructor() {
@@ -10,9 +10,6 @@ class IntroScreen {
   }
   init() {
     contentPresenter.change(this._view);
-    this._view.onAsteriskClicked = () => {
-      Application.showGreeting();
-    };
   }
 }
 

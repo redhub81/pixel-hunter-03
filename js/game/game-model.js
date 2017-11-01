@@ -1,39 +1,14 @@
 /** @module game/game-model */
 
-import gameConventions from '../config/game-conventions';
 import gameSettings from '../config/game-settings';
 import {raiseEvent} from "../helpers/event-helper";
-import {initialStateData} from "../data/game-data";
+import {initialGameStateData, gameProgressEncoder} from "../data/game-data";
 import levelsFactory from '../data/levels-factory';
-import scoring from '../logic/scoring';
 import GameStateModel from './models/game-state-model';
 import Timer from '../logic/timer';
 
-const {ResultType, ScoreLimits} = gameConventions;
 const {TotalCount} = gameSettings;
 
-
-const createGameResult = function (state) {
-  const answers = state.answers;
-  const totalPoints = scoring.getCompletionScore(answers, state.livesCount);
-  const isSuccess = totalPoints !== ScoreLimits.FAILED;
-  const result = {
-    answers,
-    resultType: isSuccess
-      ? ResultType.RIGHT
-      : ResultType.WRONG,
-    totalPoints,
-    levelsStatistic: {},
-    speedStatistic: {},
-    livesStatistic: {},
-  };
-  if (isSuccess) {
-    result.levelsStatistic = scoring.getLevelsStatistic(answers);
-    result.speedStatistic = scoring.getSpeedStatistic(answers);
-    result.livesStatistic = scoring.getLivesStatistic(state.livesCount);
-  }
-  return result;
-};
 
 export default class GameModel {
   constructor(levelData = levelsFactory.createLevels()) {
@@ -62,10 +37,19 @@ export default class GameModel {
   get isComplete() {
     return this._isComplete;
   }
-  get result() {
-    return this._result;
+  // get result() {
+  //   this._result = createGameResult(this._state);
+  //   return this._result;
+  // }
+  get progress() {
+    const progressData = {
+      player: this._state.player,
+      livesCount: this._state.livesCount,
+      answers: this._state.answers.map((answer) => answer.resultCode),
+    };
+    return gameProgressEncoder.encode(progressData);
   }
-  newGame(stateData = initialStateData) {
+  newGame(stateData = initialGameStateData) {
     this._timer.stop();
     this._isComplete = false;
     this._updateState(stateData);
@@ -99,7 +83,6 @@ export default class GameModel {
     timer.ticksCount = TotalCount.TIME;
   }
   completeGame() {
-    this._result = createGameResult(this._state);
     this._isComplete = true;
   }
   restartTimer() {

@@ -1,23 +1,30 @@
 /** @module screens/rules */
 
-import contentPresenter from '../../content-presenter.js';
-import RulesView from './rules-view.js';
-import Application from "../../application.js";
+import Application from "../../application";
+import contentPresenter from '../../content-presenter';
+import RulesView from './rules-view';
 
 class RulesScreen {
   constructor() {
     this._view = new RulesView();
   }
-  init() {
-    contentPresenter.change(this._view);
-    this._view.onResponse = ({playerName}) => {
+  static _decode(code = ``) {
+    const parts = code.split(`-`);
+    return {playerName: parts[0]};
+  }
+  init(state) {
+    const stateData = RulesScreen._decode(state);
+    const view = this._view;
+    contentPresenter.change(view);
+    view.onResponse = ({playerName}) => {
       Application.startGame(playerName);
     };
-    this._view.onGoBack = () => {
+    view.onGoBack = () => {
       Application.showGreeting();
     };
-    this._view.update();
-    this._view.focus();
+    view.update();
+    view.playerName = stateData.playerName;
+    view.focus();
   }
 }
 

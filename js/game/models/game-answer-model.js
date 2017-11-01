@@ -3,7 +3,7 @@
 import gameConventions from '../../config/game-conventions.js';
 import gameSettings from '../../config/game-settings.js';
 
-const {ResultType, SpeedType} = gameConventions;
+const {ResultType, ResultCode, SpeedType} = gameConventions;
 const {TimeSteps} = gameSettings;
 
 
@@ -36,6 +36,19 @@ export default class GameAnswerModel {
   }
   get resultType() {
     return this._resultType;
+  }
+  get resultCode() {
+    if (!this.resultType) {
+      return null;
+    }
+    if (this.resultType === ResultType.WRONG) {
+      return ResultCode.WRONG;
+    }
+    switch (this.speed) {
+      case SpeedType.FAST: return ResultCode.FAST;
+      case SpeedType.SLOW: return ResultCode.SLOW;
+      default: return ResultCode.CORRECT;
+    }
   }
   get speed() {
     return this._speed;

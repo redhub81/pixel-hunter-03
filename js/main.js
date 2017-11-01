@@ -1,6 +1,6 @@
 /** @module main */
 
-import Application from './application.js';
+import Application from './application';
+
 
 Application.init();
-Application.showIntro();
