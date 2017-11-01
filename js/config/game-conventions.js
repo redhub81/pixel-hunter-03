@@ -52,10 +52,10 @@ const ResultType = {
 };
 
 const ResultCode = {
-  WRONG: `wrong`,
-  CORRECT: `correct`,
-  FAST: `fast`,
-  SLOW: `slow`,
+  WRONG: 0,
+  CORRECT: 1,
+  FAST: 2,
+  SLOW: 3,
 };
 
 /** Скорость ответа.
@@ -72,6 +72,15 @@ const SpeedType = {
   SLOW: `SLOW`,
 };
 
+const SpeedCode = {
+  /** Нормальная скорость. */
+  NORMAL: 1,
+  /** Быстрый ответ. */
+  FAST: 2,
+  /** Медленный ответ. */
+  SLOW: 3,
+};
+
 const ScreenId = {
   INTRO: ``,
   GREETING: `greeting`,
@@ -83,7 +92,9 @@ const ScreenId = {
 export default {
   ScoreLimits,
   ResultType,
+  ResultCode,
   SpeedType,
+  SpeedCode,
   ImageType,
   LevelType,
   ImageCode,

@@ -50,10 +50,11 @@ export default class RulesView extends AbstractView {
     const isPlayerNameValid = () => {
       return rulesInputElement.value.toString().length > 0;
     };
-
-    rulesInputElement.addEventListener(`input`, function () {
+    this.updateRulesButton = () => {
       rulesButtonElement.disabled = !isPlayerNameValid();
-    });
+    };
+
+    rulesInputElement.addEventListener(`input`, () => this.updateRulesButton());
 
     rulesFormElement.addEventListener(`submit`, (evt) => {
       evt.preventDefault();
@@ -86,6 +87,7 @@ export default class RulesView extends AbstractView {
   }
   set playerName(value) {
     this._playerNameInputElement.value = value;
+    this.updateRulesButton();
   }
   /** Вызывается в ответ на ввод данных пользователем. */
   onResponse() {

@@ -23,79 +23,77 @@ const getFieldData = (value, length, char = `0`) => {
   return strValue.slice(-length);
 };
 
-const gameStateFields = {
-  levelNumber: 2,
-  time: 2,
-  livesCount: 1,
-};
-
-export const gameStateEncoder = {
-  encode: (data) => {
-    const fieldsData = Object.keys(gameStateFields)
-        .map((key) => getFieldData(data[key], gameStateFields[key]))
-        .reduce((s, it) => {
-          return s + it;
-        }, ``);
-    return `${data.playerName}-${fieldsData}`;
-  },
+const playerNameFieldEncoder = {
+  name: `player.name`,
+  encode: (data) => `${data}|`,
   decode: (code) => {
-    const parts = code.split(`-`);
-    const state = {playerName: parts[0]};
-    let fieldsData = parts[1];
-    Object.keys(gameStateFields)
-        .forEach((key) => {
-          const part = fieldsData.substr(0, gameStateFields[key]);
-          state[key] = parseInt(part, 10);
-          fieldsData = fieldsData.substr(gameStateFields[key]);
-        });
-    state.answers = [];
-    return state;
+    const parts = code.split(`|`);
+    return {
+      code: parts[1],
+      data: parts[0]
+    };
   }
 };
 
-
 const livesFieldEncoder = {
-  name: `livesCount`, 
+  name: `livesCount`,
   itemSize: 1,
   encode: (data) => getFieldData(data, livesFieldEncoder.itemSize),
-  decode: (code, data) => {
-    data[livesFieldEncoder.name] = code.substr(0, livesFieldEncoder.itemSize);
-    return code.substr(length);
+  decode: (code) => {
+    return {
+      code: code.substr(livesFieldEncoder.itemSize),
+      data: parseInt(code.substr(0, livesFieldEncoder.itemSize), 10),
+    };
   }
 };
 
 const answersFieldEncoder = {
-  name: `answers`, 
+  name: `answers`,
   headSize: 2,
   itemSize: 1,
-  encode: (data) => `${getFieldData(answers.length, answersFieldEncoder.headSize)}${answers
-    .map((it) => getFieldData(it, answersFieldEncoder.itemSize))}`,
-  decode: (code, data) => {
-    const head = fieldsCode.substr(0, answersFieldEncoder.headSize);
+  encode: (data) => `\
+${getFieldData(data.length, answersFieldEncoder.headSize)}\
+${data.map((it) => getFieldData(it, answersFieldEncoder.itemSize)).join(``)}`,
+  decode: (code) => {
+    const head = code.substr(0, answersFieldEncoder.headSize);
+    code = code.substr(answersFieldEncoder.headSize);
     const length = parseInt(head, 10);
-    answers = new Array(length).fill(null)
-      .map((it) => {
-        data[answersFieldEncoder.name] = code.substr(0, answersFieldEncoder.itemSize);
-        code = code.substr(0, answersFieldEncoder.itemSize);
-        return data;
-      });
-    return code;
+    const data = new Array(length).fill(null)
+        .map(() => {
+          const value = parseInt(code.substr(0, answersFieldEncoder.itemSize), 10);
+          code = code.substr(answersFieldEncoder.itemSize);
+          return value;
+        });
+    return {code, data};
   }
 };
 
-const gameProgressFieldsEncoders = [livesFieldEncoder, answersFieldEncoder];
+const gameProgressFieldsEncoders = [playerNameFieldEncoder, livesFieldEncoder, answersFieldEncoder];
 
 export const gameProgressEncoder = {
   encode: (data) => {
-    return Object.keys(gameProgressFieldsEncoders)
-        .map((it) => it.encode(data[it.name]))
-        .join(``);
-  }
+    const fields = gameProgressFieldsEncoders
+        .map((it) => {
+          return it.encode(it.name.split(`.`)
+              .reduce((innerData, key) => {
+                return innerData[key];
+              }, data));
+        });
+    const code = fields.join(``);
+    return code;
+  },
   decode: (code) => {
-    return Object.keys(gameProgressFieldsEncoders)
-      .reduce((data, it) => {
-        code = it.decode(code, data);
-        return data;
-      }, {});
+    return gameProgressFieldsEncoders
+        .reduce((data, it) => {
+          const {code: tailCode, data: value} = it.decode(code);
+          code = tailCode;
+          const path = it.name.split(`.`);
+          const target = path.length < 2 ? data
+            : path.slice(0, -1).reduce((obj, key) => {
+              return obj[key] || (obj[key] = {});
+            }, data);
+          target[path.slice(-1)[0]] = value;
+          return data;
+        }, {});
   }
 };

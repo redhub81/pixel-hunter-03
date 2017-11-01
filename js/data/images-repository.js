@@ -6,7 +6,7 @@ import mathHelper from '../helpers/math-helper.js';
 const {ImageType} = gameConventions;
 
 
-const LOAD_DELAY = 3000;
+const LOAD_DELAY = 2500;
 const imageSourcePrefix = `imageSource`;
 const imageSourcesByType = {
   [`${imageSourcePrefix}${ImageType.PHOTO}`]: [

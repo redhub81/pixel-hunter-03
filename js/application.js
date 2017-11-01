@@ -1,71 +1,66 @@
 /** @module application */
 
 import gameConventions from './config/game-conventions';
-import imagesRepository from './data/images-repository.js';
-import introScreen from './screens/intro/intro-screen.js';
-import greetingScreen from './screens/greeting/greeting-screen.js';
-import rulesScreen from './screens/rules/rules-screen.js';
-import GameScreen from './game/game-screen.js';
-import StatsScreen from './screens/stats/stats-screen.js';
+import imagesRepository from './data/images-repository';
+import introScreen from './screens/intro/intro-screen';
+import greetingScreen from './screens/greeting/greeting-screen';
+import rulesScreen from './screens/rules/rules-screen';
+import GameScreen from './game/game-screen';
+import StatsScreen from './screens/stats/stats-screen';
 
 const {ScreenId} = gameConventions;
 
 
 export default class Application {
-  constructor() {
-    this._isInitialized = false;
-  }
   static init() {
-    Application.routes = {
+    Application._routes = {
       [ScreenId.GREETING]: greetingScreen,
       [ScreenId.RULES]: rulesScreen,
       [ScreenId.GAME]: new GameScreen(),
       [ScreenId.STATS]: new StatsScreen(),
     };
-    Application._instance = new Application();
     window.onhashchange = () => {
-      const hashValue = location.hash.replace(`#`, ``);
-      const [screenId, state] = hashValue.split(`=`);
-      Application._routing({screenId, state});
+      const routeData = Application._getRouteData();
+      Application._routing(routeData);
     };
 
     Application.showIntro();
     imagesRepository.loadImages(() => {
-      if (!Application.instance.isInitialized) {
-        Application.showGreeting();
-      }
+      const hash = Application._getRouteData();
+      Application._routing(hash);
     });
   }
-  static get instance() {
-    return Application._instance;
-  }
   static _routing(routeData) {
-    const controller = Application.routes[routeData.screenId];
-    if (controller) {
-      controller.init(routeData.state);
-    }
+    const screenPresenter = Application._routes[routeData.screenId];
+    const routingStrategy = screenPresenter
+      ? () => screenPresenter.init(routeData.state)
+      : () => Application.showGreeting();
+    routingStrategy();
   }
-  static _getHash(screenId, state) {
-    const stateHash = state ? `=${state}` : ``;
+  static _getRouteData() {
+    const hashValue = location.hash.replace(`#`, ``);
+    const [screenId, uriCode] = hashValue.split(`=`);
+    return {screenId, state: uriCode ? decodeURIComponent(uriCode) : uriCode};
+  }
+  static _createHash(screenId, state) {
+    const stateHash = state ? `=${encodeURIComponent(state)}` : ``;
     return `${screenId}${stateHash}`;
   }
   static showIntro() {
     introScreen.init();
   }
-  static showGreeting(state) {
-    Application._instance._isInitialized = true;
-    location.hash = Application._getHash(ScreenId.GREETING, state);
+  static showGreeting() {
+    location.hash = Application._createHash(ScreenId.GREETING);
   }
-  static showRules(state) {
-    location.hash = Application._getHash(ScreenId.RULES, state);
+  static showRules(playerName) {
+    location.hash = Application._createHash(ScreenId.RULES, playerName);
   }
-  static startGame(state) {
-    location.hash = Application._getHash(ScreenId.GAME, state);
+  static startGame(playerName) {
+    location.hash = playerName
+      ? Application._createHash(ScreenId.GAME, playerName)
+      : Application._createHash(ScreenId.RULES);
   }
   static showStats(state) {
-    location.hash = Application._getHash(ScreenId.STATS, state);
-  }
-  get isInitialized() {
-    return this._isInitialized;
+    location.hash = Application._createHash(ScreenId.STATS, state);
   }
 }
