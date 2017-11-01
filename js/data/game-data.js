@@ -38,11 +38,13 @@ const playerNameFieldEncoder = {
 const livesFieldEncoder = {
   name: `livesCount`,
   itemSize: 1,
-  encode: (data) => getFieldData(data, livesFieldEncoder.itemSize),
+  encode: (data) => getFieldData(data > 0 ? data : `N`, livesFieldEncoder.itemSize),
   decode: (code) => {
+    const field = code.substr(0, livesFieldEncoder.itemSize);
+    const data = field === `N` ? -1 : parseInt(field, 10);
     return {
       code: code.substr(livesFieldEncoder.itemSize),
-      data: parseInt(code.substr(0, livesFieldEncoder.itemSize), 10),
+      data,
     };
   }
 };

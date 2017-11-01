@@ -43,12 +43,8 @@ class StatsScreen {
   }
   init(state) {
     const gameState = gameProgressEncoder.decode(state);
-    const answers = new Array(TotalCount.QUESTIONS).fill(null)
-        .map((it, index) => {
-          if (index >= gameState.answers.length) {
-            return ResultType.UNKNOWN;
-          }
-          const answer = gameState.answers[index];
+    const answers = gameState.answers
+        .map((answer) => {
           let speed;
           switch (answer) {
             case ResultCode.FAST: speed = SpeedType.FAST; break;
@@ -63,7 +59,7 @@ class StatsScreen {
         });
     const gameResult = {
       player: gameState.player,
-      levelsCount: gameState.levelsCount,
+      livesCount: gameState.livesCount,
       answers,
     };
     const gameStatistic = createGameStatistic(gameResult);
