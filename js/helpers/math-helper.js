@@ -1,4 +1,4 @@
-/** @module data/math-helper */
+/** @module helpers/math-helper */
 
 export default {
   getRandomInt: (min, max) => {

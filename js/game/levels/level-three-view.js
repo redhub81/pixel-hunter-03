@@ -1,11 +1,11 @@
-/** @module screens/game-three-view */
+/** @module screens/levels/game-three-view */
 
-import gameConventions from '../../config/game-conventions.js';
+import gameConventions from '../../config/game-conventions';
 import {raiseEvent} from '../../helpers/event-helper';
-import contentPresenter from '../../content-presenter.js';
-import AbstractView from '../../abstract-view.js';
+import contentPresenter from '../../content-presenter';
+import AbstractView from '../../abstract-view';
 import ProgressView from "../../views/progress-view";
-import answerEncoder from '../../data/answer-encoder.js';
+import answerEncoder from '../../data/encoders/answer-encoder';
 
 const {LevelType, ImageType} = gameConventions;
 

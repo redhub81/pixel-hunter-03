@@ -1,9 +1,9 @@
 /** @module game/game-view */
 
-import contentPresenter from '../content-presenter.js';
-import AbstractView from '../abstract-view.js';
-import HeaderView from '../views/header-view.js';
-import FooterView from '../views/footer-view.js';
+import contentPresenter from '../content-presenter';
+import AbstractView from '../abstract-view';
+import HeaderView from '../views/header-view';
+import FooterView from '../views/footer-view';
 import {raiseEvent} from '../helpers/event-helper';
 
 

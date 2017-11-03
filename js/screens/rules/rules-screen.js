@@ -1,6 +1,6 @@
-/** @module screens/rules */
+/** @module screens/rules/rules-screen */
 
-import Application from "../../application";
+import Application from '../../application';
 import contentPresenter from '../../content-presenter';
 import RulesView from './rules-view';
 

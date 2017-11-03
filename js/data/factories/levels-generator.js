@@ -1,31 +1,16 @@
-/** @module game/levels-generator */
+/** @module data/factories/levels-generator */
 
-import gameConventions from '../config/game-conventions.js';
-import gameSettings from '../config/game-settings.js';
-import mathHelper from '../helpers/math-helper';
-import imagesRepository from './images-repository.js';
-import answerEncoder from './answer-encoder.js';
+import gameConventions from '../../config/game-conventions';
+import gameSettings from '../../config/game-settings';
+import mathHelper from '../../helpers/math-helper';
+import imagesRepository from '../repositories/images-repository';
+import answerEncoder from '../encoders/answer-encoder';
+import {createImage, createLevel} from './levels-factory';
 
 const {LevelType, ImageType} = gameConventions;
 const {TotalCount} = gameSettings;
 const CREATE_METHOD_PREFIX = `createLevelWithType`;
 
-
-const createImage = function (imageType, location) {
-  return {
-    imageType,
-    location,
-  };
-};
-
-const createLevelBase = function () {
-  return {
-    type: 0,
-    description: ``,
-    images: [],
-    answerCode: -1,
-  };
-};
 
 const getRandomLevelType = () => {
   const levelTypeKeys = Object.keys(LevelType);
@@ -86,8 +71,9 @@ const createImagesWithOneOfTargetTypeOnly = (count, targetImageType) => {
   return createDifferentImages(imageTypes);
 };
 
-const levelFactory = {
-  [`${CREATE_METHOD_PREFIX}${LevelType.TYPE_OF_ONE_IMAGE}`]: (levelBase) => {
+const getLevelGeneratorKey = (levelType) => `${CREATE_METHOD_PREFIX}-${levelType}`;
+const levelGeneratorByKey = {
+  [getLevelGeneratorKey(LevelType.TYPE_OF_ONE_IMAGE)]: (levelBase) => {
     levelBase.type = LevelType.TYPE_OF_ONE_IMAGE;
     levelBase.description = `Угадай, фото или рисунок?`;
 
@@ -98,50 +84,49 @@ const levelFactory = {
 
     return levelBase;
   },
-  [`${CREATE_METHOD_PREFIX}${LevelType.TYPE_OF_TWO_IMAGES}`]: (levelBase) => {
-    levelBase.type = LevelType.TYPE_OF_TWO_IMAGES;
-    levelBase.description = `Угадайте для каждого изображения фото или рисунок?`;
+  [getLevelGeneratorKey(LevelType.TYPE_OF_TWO_IMAGES)]: (level) => {
+    level.type = LevelType.TYPE_OF_TWO_IMAGES;
+    level.description = `Угадайте для каждого изображения фото или рисунок?`;
 
-    levelBase.images.length = 0;
-    createDifferentImagesWithRandomType(2).forEach((it) => levelBase.images.push(it));
+    level.images.length = 0;
+    createDifferentImagesWithRandomType(2).forEach((it) => level.images.push(it));
 
-    levelBase.answerCode = answerEncoder.encode(levelBase.images.map((it) => it.imageType));
+    level.answerCode = answerEncoder.encode(level.images.map((it) => it.imageType));
 
-    return levelBase;
+    return level;
   },
-  [`${CREATE_METHOD_PREFIX}${LevelType.PHOTO_AMONG_THREE_IMAGES}`]: (levelBase) => {
-    levelBase.type = LevelType.PHOTO_AMONG_THREE_IMAGES;
-    levelBase.description = `Найдите фото среди изображений`;
+  [getLevelGeneratorKey(LevelType.PHOTO_AMONG_THREE_IMAGES)]: (level) => {
+    level.type = LevelType.PHOTO_AMONG_THREE_IMAGES;
+    level.description = `Найдите фото среди изображений`;
 
-    levelBase.images.length = 0;
+    level.images.length = 0;
     createImagesWithOneOfTargetTypeOnly(3, ImageType.PHOTO)
-        .forEach((it) => levelBase.images.push(it));
+        .forEach((it) => level.images.push(it));
 
-    levelBase.answerCode = answerEncoder.encode(levelBase.images.map((it) => it.imageType));
+    level.answerCode = answerEncoder.encode(level.images.map((it) => it.imageType));
 
-    return levelBase;
+    return level;
   },
-  [`${CREATE_METHOD_PREFIX}${LevelType.PAINTING_AMONG_THREE_IMAGES}`]: (levelBase) => {
-    levelBase.type = LevelType.PAINTING_AMONG_THREE_IMAGES;
-    levelBase.description = `Найдите рисунок среди изображений`;
+  [getLevelGeneratorKey(LevelType.PAINTING_AMONG_THREE_IMAGES)]: (level) => {
+    level.type = LevelType.PAINTING_AMONG_THREE_IMAGES;
+    level.description = `Найдите рисунок среди изображений`;
 
-    levelBase.images.length = 0;
+    level.images.length = 0;
     createImagesWithOneOfTargetTypeOnly(3, ImageType.PAINTING)
-        .forEach((it) => levelBase.images.push(it));
+        .forEach((it) => level.images.push(it));
 
-    levelBase.answerCode = answerEncoder.encode(levelBase.images.map((it) => it.imageType));
+    level.answerCode = answerEncoder.encode(level.images.map((it) => it.imageType));
 
-    return levelBase;
+    return level;
   },
 };
 
-export default {
-  createLevels: () => {
-    return new Array(TotalCount.QUESTIONS).fill(void 0)
-        .map(() => {
-          const levelType = getRandomLevelType();
-          const levelBase = createLevelBase();
-          return levelFactory[`${CREATE_METHOD_PREFIX}${levelType}`](levelBase);
-        });
-  }
+export const generateLevels = () => {
+  return new Array(TotalCount.QUESTIONS).fill(void 0)
+      .map(() => {
+        const levelType = getRandomLevelType();
+        const levelBase = createLevel();
+        const levelGeneratorKey = getLevelGeneratorKey(levelType);
+        return levelGeneratorByKey[levelGeneratorKey](levelBase);
+      });
 };

@@ -1,7 +1,7 @@
-/** @module parts/progress-view */
+/** @module views/progress-view */
 
-import gameConventions from '../config/game-conventions.js';
-import gameSettings from '../config/game-settings.js';
+import gameConventions from '../config/game-conventions';
+import gameSettings from '../config/game-settings';
 import AbstractView from '../abstract-view';
 
 const {ResultType, SpeedType} = gameConventions;

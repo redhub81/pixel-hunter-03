@@ -1,6 +1,6 @@
-/** @module screens/intro-view */
+/** @module screens/intro/intro-view */
 
-import AbstractView from '../../abstract-view.js';
+import AbstractView from '../../abstract-view';
 
 export default class IntroView extends AbstractView {
   /** Конструктор. */

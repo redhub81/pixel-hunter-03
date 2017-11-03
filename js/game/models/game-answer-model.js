@@ -1,7 +1,7 @@
-/** @module game/game-state-model */
+/** @module game/models/game-state-model */
 
-import gameConventions from '../../config/game-conventions.js';
-import gameSettings from '../../config/game-settings.js';
+import gameConventions from '../../config/game-conventions';
+import gameSettings from '../../config/game-settings';
 
 const {ResultType, ResultCode, SpeedType} = gameConventions;
 const {TimeSteps} = gameSettings;

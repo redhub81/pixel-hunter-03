@@ -1,10 +1,10 @@
-/** @module screens/stats-view */
+/** @module screens/stats/stats-view */
 
 import contentPresenter from '../../content-presenter.js';
 import AbstractView from '../../abstract-view';
 import HeaderView from '../../views/header-view';
-import TitleView from "./views/title-view";
-import ResultView from "./views/result-view";
+import TitleView from './views/title-view';
+import ResultView from './views/result-view';
 import FooterView from '../../views/footer-view';
 
 

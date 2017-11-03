@@ -1,3 +1,5 @@
+/** @module data/game-data.test */
+
 import assert from 'assert';
 
 describe(`Array`, () => {

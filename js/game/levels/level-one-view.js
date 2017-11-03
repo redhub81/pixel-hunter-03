@@ -1,10 +1,10 @@
-/** @module screens/game-one-view */
+/** @module screens/levels/game-one-view */
 
-import gameConventions from '../../config/game-conventions.js';
-import contentPresenter from '../../content-presenter.js';
+import gameConventions from '../../config/game-conventions';
+import contentPresenter from '../../content-presenter';
 import {raiseEvent} from '../../helpers/event-helper';
-import answerEncoder from '../../data/answer-encoder.js';
-import AbstractView from '../../abstract-view.js';
+import answerEncoder from '../../data/encoders/answer-encoder';
+import AbstractView from '../../abstract-view';
 import ProgressView from "../../views/progress-view";
 
 const {ImageType} = gameConventions;

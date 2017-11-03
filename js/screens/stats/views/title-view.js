@@ -1,6 +1,6 @@
-/** @module screens/result-view */
+/** @module screens/stats/views/title-view */
 
-import gameConventions from '../../../config/game-conventions.js';
+import gameConventions from '../../../config/game-conventions';
 import AbstractView from '../../../abstract-view';
 
 const {ResultType} = gameConventions;

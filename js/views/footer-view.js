@@ -1,4 +1,4 @@
-/** @module parts/footer-view */
+/** @module views/footer-view */
 
 import AbstractView from '../abstract-view';
 

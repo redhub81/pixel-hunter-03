@@ -5,13 +5,13 @@
  */
 const LevelType = {
   /** Требуется указать тип одного изображения. */
-  TYPE_OF_ONE_IMAGE: 1,
+  TYPE_OF_ONE_IMAGE: `tinder-like`,
   /** Требуется указать тип каждого из двух изображений. */
-  TYPE_OF_TWO_IMAGES: 2,
+  TYPE_OF_TWO_IMAGES: `two-of-two`,
   /** Требуется указать одно фото среди 3 изображений. */
-  PHOTO_AMONG_THREE_IMAGES: 3,
+  PHOTO_AMONG_THREE_IMAGES: `photo-of-three`,
   /** Требуется указать один рисунок среди 3 изображений. */
-  PAINTING_AMONG_THREE_IMAGES: 4,
+  PAINTING_AMONG_THREE_IMAGES: `painting-of-three`,
 };
 
 /** Типы изображений.

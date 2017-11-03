@@ -1,7 +1,7 @@
 /** @module logic/timer.test */
 
 import assert from 'assert';
-import Timer from './timer.js';
+import Timer from './timer';
 
 describe(`Timer factory:`, () => {
   it(`creates an object with tick method for valid tick count.`, () => {

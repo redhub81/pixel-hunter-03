@@ -1,14 +1,14 @@
 /** @module game/game-screen */
 
-import gameConventions from '../config/game-conventions.js';
-import gameSettings from '../config/game-settings.js';
-import Application from '../application.js';
-import contentPresenter from '../content-presenter.js';
-import GameModel from './game-model.js';
-import GameView from './game-view.js';
-import levelOneView from './levels/level-one-view.js';
-import levelTwoView from './levels/level-two-view.js';
-import levelThreeView from './levels/level-three-view.js';
+import gameConventions from '../config/game-conventions';
+import gameSettings from '../config/game-settings';
+import Application from '../application';
+import contentPresenter from '../content-presenter';
+import GameModel from './game-model';
+import GameView from './game-view';
+import levelOneView from './levels/level-one-view';
+import levelTwoView from './levels/level-two-view';
+import levelThreeView from './levels/level-three-view';
 import {initialGameStateData} from "../data/game-data";
 
 const {TimeSteps} = gameSettings;
@@ -28,11 +28,11 @@ const getLevelView = (levelType) => {
 };
 
 export default class GameScreen {
-  constructor(levelData) {
+  constructor(levels) {
     this._stateUpdateByName = {};
     this._stateUpdateByName.time = () => this._updateTime();
 
-    this._model = new GameModel(levelData);
+    this._model = new GameModel(levels);
     this._view = new GameView(this._model, () => this._createLevelView());
 
     this._model.state.onChanged = ({target}) => {

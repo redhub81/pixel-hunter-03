@@ -1,7 +1,7 @@
-/** @module screens/greeting-view */
+/** @module screens/greeting/greeting-view */
 
-import contentPresenter from '../../content-presenter.js';
-import AbstractView from '../../abstract-view.js';
+import contentPresenter from '../../content-presenter';
+import AbstractView from '../../abstract-view';
 import FooterView from '../../views/footer-view';
 
 export default class GreetingView extends AbstractView {

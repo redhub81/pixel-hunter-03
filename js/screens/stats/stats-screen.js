@@ -1,16 +1,14 @@
 /** @module screens/stats/stats-screen */
 
 import gameConventions from '../../config/game-conventions';
-import gameSettings from '../../config/game-settings';
 import contentPresenter from '../../content-presenter';
-import Application from "../../application";
-import {gameProgressEncoder} from "../../data/game-data";
+import Application from '../../application';
+import {gameProgressEncoder} from '../../data/encoders/progress-encoder';
 import scoring from '../../logic/scoring';
-import StatsModel from "./stats-model";
+import StatsModel from './stats-model';
 import StatsView from './stats-view';
 
 const {ResultType, ResultCode, SpeedType, ScoreLimits} = gameConventions;
-const {TotalCount} = gameSettings;
 
 
 const createGameStatistic = function (gameState) {

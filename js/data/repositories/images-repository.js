@@ -1,7 +1,7 @@
-/** @module data/images-repository */
+/** @module data/repositories/images-repository */
 
-import gameConventions from '../config/game-conventions.js';
-import mathHelper from '../helpers/math-helper.js';
+import gameConventions from '../../config/game-conventions';
+import mathHelper from '../../helpers/math-helper';
 
 const {ImageType} = gameConventions;
 
