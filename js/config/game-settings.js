@@ -1,14 +1,21 @@
 /** @module config/game-settings */
 
+/** Схема униклаьного идентификатора ресурса. */
+const UriScheme = {
+  HTTP: `http`,
+  HTTPS: `https`,
+};
+
 /** Домены игровых серверов. */
 const GameDomain = {
   HTML_ACADEMY: `es.dump.academy`,
 };
 
-/** Схема униклаьного идентификатора ресурса. */
-const UriScheme = {
-  HTTP: `http`,
-  HTTPS: `https`,
+/** Относительные пути к ресурсам игры на сервере. */
+const GameRelativeUrlPath = {
+  BASE: `pixel-hunter`,
+  QUESTIONS: `questions`,
+  STATS: `stats`,
 };
 
 /** Суммарное количство ресурсов в игре.
@@ -69,8 +76,9 @@ const AccuracyScore = {
  *************************************************************************************************/
 
 export default {
-  GameDomain,
   UriScheme,
+  GameDomain,
+  GameRelativeUrlPath,
   TotalCount,
   TimeSteps,
   AnswerScore,

@@ -2,15 +2,17 @@
 
 import gameSettings from './game-settings';
 
-const {GameDomain, UriScheme} = gameSettings;
+const {UriScheme, GameDomain, GameRelativeUrlPath} = gameSettings;
+
 
 class GameServer {
-  constructor(uriScheme, domain, gamePath) {
-    this._baseUrl = `${uriScheme}://${domain}/${gamePath}`;
+  constructor(uriScheme, domain, relUrlPath) {
+    this._relUrlPath = relUrlPath;
+    this._baseUrl = `${uriScheme}://${domain}/${this._relUrlPath.BASE}`;
   }
   static get default() {
     if (!GameServer._default) {
-      GameServer._default = new GameServer(UriScheme.HTTPS, GameDomain.HTML_ACADEMY, `pixel-hunter`);
+      GameServer._default = new GameServer(UriScheme.HTTPS, GameDomain.HTML_ACADEMY, GameRelativeUrlPath);
     }
     return GameServer._default;
   }
@@ -18,10 +20,10 @@ class GameServer {
     return this._baseUrl;
   }
   get questionsUrl() {
-    return `${this.baseUrl}/questions`;
+    return `${this.baseUrl}/${this._relUrlPath.QUESTIONS}`;
   }
   get statsUrl() {
-    return `${this.baseUrl}/stats`;
+    return `${this.baseUrl}/${this._relUrlPath.STATS}`;
   }
 }
 
