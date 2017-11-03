@@ -1,5 +1,16 @@
 /** @module config/game-settings */
 
+/** Домены игровых серверов. */
+const GameDomain = {
+  HTML_ACADEMY: `es.dump.academy`,
+};
+
+/** Схема униклаьного идентификатора ресурса. */
+const UriScheme = {
+  HTTP: `http`,
+  HTTPS: `https`,
+};
+
 /** Суммарное количство ресурсов в игре.
  * @enum {number}
  */
@@ -58,6 +69,8 @@ const AccuracyScore = {
  *************************************************************************************************/
 
 export default {
+  GameDomain,
+  UriScheme,
   TotalCount,
   TimeSteps,
   AnswerScore,

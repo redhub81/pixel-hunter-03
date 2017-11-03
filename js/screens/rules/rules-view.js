@@ -1,11 +1,11 @@
-/** @module screens/rules-view */
+/** @module screens/rules/rules-view */
 
-import AbstractView from '../../abstract-view.js';
-import gameSettings from '../../config/game-settings.js';
-import contentPresenter from '../../content-presenter.js';
+import AbstractView from '../../abstract-view';
+import gameSettings from '../../config/game-settings';
+import contentPresenter from '../../content-presenter';
 import HeaderView from '../../views/header-view';
 import FooterView from '../../views/footer-view';
-import {raiseEvent} from "../../helpers/event-helper";
+import {raiseEvent} from '../../helpers/event-helper';
 
 const {TotalCount} = gameSettings;
 

@@ -1,6 +1,6 @@
-/** @module logic/answer-encoder */
+/** @module data/encoders/answer-encoder */
 
-import gameConventions from '../config/game-conventions.js';
+import gameConventions from '../../config/game-conventions';
 
 const {ImageCode} = gameConventions;
 

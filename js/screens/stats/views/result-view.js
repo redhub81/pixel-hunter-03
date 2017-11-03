@@ -1,8 +1,8 @@
-/** @module screens/result-view */
+/** @module screens/stats/views/result-view */
 
 import gameConventions from '../../../config/game-conventions';
 import gameSettings from '../../../config/game-settings';
-import contentPresenter from '../../../content-presenter.js';
+import contentPresenter from '../../../content-presenter';
 import AbstractView from '../../../abstract-view';
 import ProgressView from "../../../views/progress-view";
 

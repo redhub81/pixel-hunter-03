@@ -1,7 +1,7 @@
 /** @module logic/scoring */
 
-import gameConventions from '../config/game-conventions.js';
-import gameSettings from "../config/game-settings.js";
+import gameConventions from '../config/game-conventions';
+import gameSettings from '../config/game-settings';
 
 const {ResultType, SpeedType, ScoreLimits} = gameConventions;
 const {TotalCount, AnswerScore, SpeedScore, AccuracyScore} = gameSettings;

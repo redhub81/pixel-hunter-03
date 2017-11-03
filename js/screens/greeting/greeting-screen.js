@@ -1,8 +1,8 @@
-/** @module screens/greeting */
+/** @module screens/greeting/greeting-screen */
 
-import contentPresenter from '../../content-presenter.js';
-import GreetingView from './greeting-view.js';
-import Application from "../../application.js";
+import contentPresenter from '../../content-presenter';
+import GreetingView from './greeting-view';
+import Application from '../../application';
 
 class GreetingScreen {
   constructor() {

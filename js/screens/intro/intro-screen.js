@@ -1,7 +1,7 @@
-/** @module screens/intro */
+/** @module screens/intro/intro-screen */
 
-import contentPresenter from '../../content-presenter.js';
-import IntroView from './intro-view.js';
+import contentPresenter from '../../content-presenter';
+import IntroView from './intro-view';
 
 
 class IntroScreen {

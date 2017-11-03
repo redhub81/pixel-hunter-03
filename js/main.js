@@ -3,4 +3,4 @@
 import Application from './application';
 
 
-Application.init();
+Application.run();

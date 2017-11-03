@@ -1,4 +1,4 @@
-/** @module game/game-state-model */
+/** @module game/models/game-state-model */
 
 import GameAnswerModel from "./game-answer-model";
 

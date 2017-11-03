@@ -1,7 +1,7 @@
-/** @module parts/header-view */
+/** @module views/header-view */
 
 import AbstractView from '../abstract-view';
-import gameSettings from '../config/game-settings.js';
+import gameSettings from '../config/game-settings';
 
 const {TotalCount} = gameSettings;
 

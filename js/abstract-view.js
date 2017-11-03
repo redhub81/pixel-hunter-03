@@ -1,6 +1,6 @@
 /** @module abstract-view */
 
-import contentBuilder from './content-builder.js';
+import contentBuilder from './content-builder';
 
 /**
  * Абстрактный базовый класс для представлений.

@@ -1,9 +1,9 @@
 /** @module game/game-model */
 
 import gameSettings from '../config/game-settings';
-import {raiseEvent} from "../helpers/event-helper";
-import {initialGameStateData, gameProgressEncoder} from "../data/game-data";
-import levelsFactory from '../data/levels-factory';
+import {raiseEvent} from '../helpers/event-helper';
+import {initialGameStateData} from '../data/game-data';
+import {gameProgressEncoder} from "../data/encoders/progress-encoder";
 import GameStateModel from './models/game-state-model';
 import Timer from '../logic/timer';
 
@@ -11,12 +11,11 @@ const {TotalCount} = gameSettings;
 
 
 export default class GameModel {
-  constructor(levelData = levelsFactory.createLevels()) {
+  constructor(levelData) {
     this._levels = levelData;
     this._state = new GameStateModel();
     this._level = null;
     this._isComplete = false;
-    this._result = {};
     this._timer = new Timer(TotalCount.TIME, () => {
       this._state.time = this._timer.ticksCount;
       raiseEvent(this.onTimeout);
@@ -37,10 +36,6 @@ export default class GameModel {
   get isComplete() {
     return this._isComplete;
   }
-  // get result() {
-  //   this._result = createGameResult(this._state);
-  //   return this._result;
-  // }
   get progress() {
     const progressData = {
       player: this._state.player,

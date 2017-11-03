@@ -1,9 +1,9 @@
 /** @module logic/scoring.test */
 
 import assert from 'assert';
-import gameConventions from "../config/game-conventions.js";
-import gameSettings from "../config/game-settings.js";
-import scoring from './scoring.js';
+import gameConventions from "../config/game-conventions";
+import gameSettings from "../config/game-settings";
+import scoring from './scoring';
 
 const {ResultType, SpeedType, ScoreLimits} = gameConventions;
 const {TotalCount} = gameSettings;
