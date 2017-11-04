@@ -1,6 +1,8 @@
 /** @module config/game-settings */
 
-/** Схема униклаьного идентификатора ресурса. */
+/** Схема униклаьного идентификатора ресурса.
+ * @enum {string}
+ */
 const UriScheme = {
   HTTP: `http`,
   HTTPS: `https`,
@@ -11,7 +13,9 @@ const GameDomain = {
   HTML_ACADEMY: `es.dump.academy`,
 };
 
-/** Относительные пути к ресурсам игры на сервере. */
+/** Относительные пути к ресурсам игры на сервере.
+ * @enum {string}
+ */
 const GameRelativeUrlPath = {
   BASE: `pixel-hunter`,
   QUESTIONS: `questions`,

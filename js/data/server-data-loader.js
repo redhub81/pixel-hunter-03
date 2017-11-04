@@ -1,7 +1,7 @@
-/** @module data/game-data-loader */
+/** @module data/server-data-loader */
 
 class GameDataLoader {
-  constructor(gameServer) {
+  init(gameServer) {
     this._gameServer = gameServer;
   }
   loadQuestions() {
@@ -11,7 +11,8 @@ class GameDataLoader {
     if (!name) {
       throw new Error(`Не задано имя пользователя для получения статистики.`);
     }
-    return fetch(`${this._gameServer.statsUrl}/${name}`).then((res) => res.json());
+    return fetch(`${this._gameServer.statsUrl}/${name}`)
+        .then((res) => res.json());
   }
   savePlayerStats(name, data) {
     if (!name) {
@@ -31,4 +32,4 @@ class GameDataLoader {
   }
 }
 
-export default GameDataLoader;
+export default new GameDataLoader();

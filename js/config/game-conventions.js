@@ -51,6 +51,9 @@ const ResultType = {
   WRONG: `WRONG`,
 };
 
+/** Коды результатов игры.
+ * @enum {number}
+ */
 const ResultCode = {
   WRONG: 0,
   CORRECT: 1,
@@ -72,6 +75,9 @@ const SpeedType = {
   SLOW: `SLOW`,
 };
 
+/** Коды скорости ответа.
+ * @enum {number}
+ */
 const SpeedCode = {
   /** Нормальная скорость. */
   NORMAL: 1,
@@ -81,6 +87,9 @@ const SpeedCode = {
   SLOW: 3,
 };
 
+/** Идентификаторы игровых экранов.
+ * @enum {string}
+ */
 const ScreenId = {
   INTRO: ``,
   GREETING: `greeting`,
@@ -88,6 +97,32 @@ const ScreenId = {
   GAME: `game`,
   STATS: `stats`,
 };
+
+/** Направление сортировки данных.
+ * @enum {number}
+ */
+const OrderDirection = {
+  /** В порядке возрастания. */
+  ASC: 1,
+  /** В порядке убывания. */
+  DESC: -1,
+};
+
+/** Идентификаторы сообщений
+ * @enum {string}
+ */
+const MessageId = {
+  WARNING_CONTINUE_APP_WORKING: `warningContinueAppWorking`,
+  WARNING_CONTINUE_APP_OFFLINE: `warningContinueAppOffline`,
+  ERROR_UNRECOVERABLE: `errorUnrecoverable`,
+  ERROR_GAME_SAVE: `errorSaveGame`,
+  ERROR_GAME_LEVELS_LOADING: `errorGameLevelsLoading`,
+  ERROR_GAME_CANNOT_LOAD_DATA: `errorGameCannotLoadData`,
+  ERROR_GAME_LEVEL_IMAGE_NOT_LOADED: `errorGameLevelImageNotLoaded`,
+  ERROR_GAME_LEVEL_IMAGES_NOT_LOADED: `errorGameLevelImagesNotLoaded`,
+  ERROR_GAME_STATS_NOT_LOADED: `errorGameStatsNotLoaded`,
+};
+
 
 export default {
   ScoreLimits,
@@ -99,4 +134,6 @@ export default {
   LevelType,
   ImageCode,
   ScreenId,
+  OrderDirection,
+  MessageId
 };

@@ -61,8 +61,9 @@ ${data.map((it) => getFieldData(it, answersFieldEncoder.itemSize)).join(``)}`,
 const gameProgressFieldsEncoders = [playerNameFieldEncoder, livesFieldEncoder, answersFieldEncoder];
 
 export const gameProgressEncoder = {
-  encode: (data) => {
+  encode: (data, includeName = true) => {
     const fields = gameProgressFieldsEncoders
+        .slice(!includeName ? 1 : 0)
         .map((it) => {
           return it.encode(it.name.split(`.`)
               .reduce((innerData, key) => {
@@ -72,9 +73,13 @@ export const gameProgressEncoder = {
     const code = fields.join(``);
     return code;
   },
-  decode: (code) => {
+  decode: (code, includeName = true, initialData = {}) => {
     return gameProgressFieldsEncoders
+        .slice(!includeName ? 1 : 0)
         .reduce((data, it) => {
+          if (!code) {
+            return data;
+          }
           const {code: tailCode, data: value} = it.decode(code);
           code = tailCode;
           const path = it.name.split(`.`);
@@ -84,6 +89,6 @@ export const gameProgressEncoder = {
             }, data);
           target[path.slice(-1)[0]] = value;
           return data;
-        }, {});
+        }, initialData);
   }
 };

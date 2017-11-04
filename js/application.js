@@ -1,10 +1,12 @@
 /** @module application */
 
 import gameConventions from './config/game-conventions';
+import messageRepository from './config/message-repository';
 import GameServer from './config/game-server';
-import GameDataLoader from './data/game-data-loader';
+import GameDataLoader from './data/server-data-loader';
 import {adapt} from './data/server-data-adapter';
 import {generateLevels} from './data/factories/levels-generator';
+import {gameProgressEncoder} from "./data/encoders/progress-encoder";
 import imagesRepository from './data/repositories/images-repository';
 import introScreen from './screens/intro/intro-screen';
 import greetingScreen from './screens/greeting/greeting-screen';
@@ -12,7 +14,7 @@ import rulesScreen from './screens/rules/rules-screen';
 import GameScreen from './game/game-screen';
 import StatsScreen from './screens/stats/stats-screen';
 
-const {ScreenId} = gameConventions;
+const {ScreenId, MessageId} = gameConventions;
 
 
 export default class Application {
@@ -21,7 +23,7 @@ export default class Application {
       [ScreenId.GREETING]: greetingScreen,
       [ScreenId.RULES]: rulesScreen,
       [ScreenId.GAME]: new GameScreen(levels),
-      [ScreenId.STATS]: new StatsScreen(),
+      [ScreenId.STATS]: new StatsScreen(Application._loader),
     };
     window.onhashchange = () => {
       const routeData = Application._getRouteData();
@@ -58,25 +60,44 @@ export default class Application {
       ? Application._createHash(ScreenId.GAME, playerName)
       : Application._createHash(ScreenId.RULES);
   }
-  static showStats(state) {
-    location.hash = Application._createHash(ScreenId.STATS, state);
+  static completeGame(result) {
+    const playerName = result.player.name;
+    const stateResultCode = gameProgressEncoder.encode(result);
+    const code = gameProgressEncoder.encode(result, false);
+    GameDataLoader.savePlayerStats(playerName, {code})
+        .then(() => {
+          location.hash = Application._createHash(ScreenId.STATS, stateResultCode);
+        })
+        .catch((error) => {
+          window.console.error(messageRepository.getMessage(MessageId.ERROR_GAME_SAVE, {playerName, error}));
+          window.console.warn(messageRepository.getMessage(MessageId.WARNING_CONTINUE_APP_OFFLINE));
+          location.hash = Application._createHash(ScreenId.STATS, stateResultCode);
+        });
+  }
+  static showStats(resultCode) {
+    location.hash = Application._createHash(ScreenId.STATS, resultCode);
   }
   static run(gameServer = GameServer.default) {
     Application.showIntro();
-    Application._loader = new GameDataLoader(gameServer);
-    Application._loader.loadQuestions()
+    GameDataLoader.init(gameServer);
+    GameDataLoader.loadQuestions()
         .then(adapt)
-        .then((levels) => Application.init(levels))
-        .catch((evt) => {
-          window.console.error(evt);
+        .then((levels) => {
+          Application.init(levels);
+          return levels;
+        })
+        .catch((error) => {
+          window.console.error(messageRepository.getMessage(MessageId.ERROR_GAME_LEVELS_LOADING, {error}));
+          window.console.warn(messageRepository.getMessage(MessageId.WARNING_CONTINUE_APP_OFFLINE));
           Application.init(generateLevels());
         })
-        .then(() => imagesRepository.loadImages(() => {
+        .then((levels) => imagesRepository.loadImages(levels, () => {
           const hash = Application._getRouteData();
           Application._routing(hash);
         }))
-        .catch((evt) => {
-          window.console.error(evt);
+        .catch((error) => {
+          window.console.error(messageRepository.getMessage(MessageId.ERROR_UNRECOVERABLE));
+          window.console.error(messageRepository.getMessage(MessageId.ERROR_GAME_CANNOT_LOAD_DATA, {error}));
         });
   }
 }

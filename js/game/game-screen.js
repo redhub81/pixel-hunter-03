@@ -9,7 +9,7 @@ import GameView from './game-view';
 import levelOneView from './levels/level-one-view';
 import levelTwoView from './levels/level-two-view';
 import levelThreeView from './levels/level-three-view';
-import {initialGameStateData} from "../data/game-data";
+import {initialGameStateData} from '../data/game-data';
 
 const {TimeSteps} = gameSettings;
 const {LevelType} = gameConventions;
@@ -46,8 +46,17 @@ export default class GameScreen {
     };
     this._view.onGoBack = () => {
       this._model.stopTimer();
-      Application.showGreeting();
+      this._confirmGoBack();
     };
+  }
+  _confirmGoBack() {
+    // eslint-disable-next-line no-alert
+    const isConfirmed = confirm(`Вы действительно хотите прервать игру?`);
+    if (isConfirmed) {
+      Application.showGreeting();
+      return;
+    }
+    this._model.continueTimer();
   }
   _createLevelView() {
     const model = this._model;
@@ -74,8 +83,7 @@ export default class GameScreen {
       gameModel.completeLevel(data.answerCode);
     }
     if (gameModel.isComplete) {
-      // resultsRepository.saveResult(gameModel.result);
-      Application.showStats(gameModel.progress);
+      Application.completeGame(gameModel.progress);
       return;
     }
     this._view.update();
