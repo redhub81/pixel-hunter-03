@@ -67,9 +67,9 @@ const imagesRepository = {
     imagesRepository._prepareImages()
         .then((gameImages) => {
           const loadImagePromises = gameImages.map((gameImage) => imagesRepository._loadImage(gameImage.location));
-          Promise.all(loadImagePromises);
-          onLoadCallback();
+          return Promise.all(loadImagePromises);
         })
+        .then(() => onLoadCallback())
         .catch((error) => {
           window.console.error(messageRepository.getMessage(MessageId.ERROR_GAME_LEVEL_IMAGES_NOT_LOADED, {error}));
           window.console.warn(messageRepository.getMessage(MessageId.WARNING_CONTINUE_APP_WORKING));
