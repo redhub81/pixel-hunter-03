@@ -51,6 +51,9 @@ const ResultType = {
   WRONG: `WRONG`,
 };
 
+/** Коды результатов игры.
+ * @enum {number}
+ */
 const ResultCode = {
   WRONG: 0,
   CORRECT: 1,
@@ -72,6 +75,9 @@ const SpeedType = {
   SLOW: `SLOW`,
 };
 
+/** Коды скорости ответа.
+ * @enum {number}
+ */
 const SpeedCode = {
   /** Нормальная скорость. */
   NORMAL: 1,
@@ -81,12 +87,23 @@ const SpeedCode = {
   SLOW: 3,
 };
 
+/**
+ * Идентификаторы игровых экранов.
+ */
 const ScreenId = {
   INTRO: ``,
   GREETING: `greeting`,
   RULES: `rules`,
   GAME: `game`,
   STATS: `stats`,
+};
+
+/** Направление сортировки данных. */
+const OrderDirection = {
+  /** В порядке возрастания. */
+  ASC: 1,
+  /** В порядке убывания. */
+  DESC: -1,
 };
 
 export default {
@@ -99,4 +116,5 @@ export default {
   LevelType,
   ImageCode,
   ScreenId,
+  OrderDirection,
 };

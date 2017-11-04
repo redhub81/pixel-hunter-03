@@ -74,8 +74,7 @@ export default class GameScreen {
       gameModel.completeLevel(data.answerCode);
     }
     if (gameModel.isComplete) {
-      // resultsRepository.saveResult(gameModel.result);
-      Application.showStats(gameModel.progress);
+      Application.compliteGame(gameModel.progress);
       return;
     }
     this._view.update();

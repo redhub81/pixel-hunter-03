@@ -33,7 +33,7 @@ const getRandomImageTypes = (ignorImageType) => {
 const createImagesWithRandomType = (count) => new Array(count).fill(void 0)
     .map(() => {
       const imageType = getRandomImageTypes();
-      return createImage(imageType, imagesRepository.getRandomImage(imageType));
+      return imagesRepository.getRandomImage(imageType);
     });
 
 const createDifferentImages = (imageTypes) => {

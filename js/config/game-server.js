@@ -6,13 +6,13 @@ const {UriScheme, GameDomain, GameRelativeUrlPath} = gameSettings;
 
 
 class GameServer {
-  constructor(uriScheme, domain, relUrlPath) {
+  constructor(domain, uriScheme = UriScheme.HTTPS, relUrlPath = GameRelativeUrlPath) {
     this._relUrlPath = relUrlPath;
     this._baseUrl = `${uriScheme}://${domain}/${this._relUrlPath.BASE}`;
   }
   static get default() {
     if (!GameServer._default) {
-      GameServer._default = new GameServer(UriScheme.HTTPS, GameDomain.HTML_ACADEMY, GameRelativeUrlPath);
+      GameServer._default = new GameServer(GameDomain.HTML_ACADEMY);
     }
     return GameServer._default;
   }

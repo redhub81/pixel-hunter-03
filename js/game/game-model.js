@@ -3,7 +3,6 @@
 import gameSettings from '../config/game-settings';
 import {raiseEvent} from '../helpers/event-helper';
 import {initialGameStateData} from '../data/game-data';
-import {gameProgressEncoder} from "../data/encoders/progress-encoder";
 import GameStateModel from './models/game-state-model';
 import Timer from '../logic/timer';
 
@@ -37,12 +36,12 @@ export default class GameModel {
     return this._isComplete;
   }
   get progress() {
-    const progressData = {
+    return {
+      date: 0,
       player: this._state.player,
       livesCount: this._state.livesCount,
       answers: this._state.answers.map((answer) => answer.resultCode),
     };
-    return gameProgressEncoder.encode(progressData);
   }
   newGame(stateData = initialGameStateData) {
     this._timer.stop();

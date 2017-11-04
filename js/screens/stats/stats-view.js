@@ -35,8 +35,10 @@ export default class StatsView extends AbstractView {
   }
   update() {
     this.updateHeader();
-    this.updateTitle();
-    this.updateResults();
+    // if (this.model.results.length > 0) {
+    //   this.updateTitle();
+    //   this.updateResults();
+    // }
     this.updateFooter();
   }
   updateHeader() {
