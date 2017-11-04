@@ -1,6 +1,7 @@
 /** @module application */
 
 import gameConventions from './config/game-conventions';
+import messageRepository from './config/message-repository';
 import GameServer from './config/game-server';
 import GameDataLoader from './data/server-data-loader';
 import {adapt} from './data/server-data-adapter';
@@ -13,7 +14,7 @@ import rulesScreen from './screens/rules/rules-screen';
 import GameScreen from './game/game-screen';
 import StatsScreen from './screens/stats/stats-screen';
 
-const {ScreenId} = gameConventions;
+const {ScreenId, MessageId} = gameConventions;
 
 
 export default class Application {
@@ -59,7 +60,7 @@ export default class Application {
       ? Application._createHash(ScreenId.GAME, playerName)
       : Application._createHash(ScreenId.RULES);
   }
-  static compliteGame(result) {
+  static completeGame(result) {
     const playerName = result.player.name;
     const stateResultCode = gameProgressEncoder.encode(result);
     const code = gameProgressEncoder.encode(result, false);
@@ -68,8 +69,8 @@ export default class Application {
           location.hash = Application._createHash(ScreenId.STATS, stateResultCode);
         })
         .catch((error) => {
-          window.console.error(`Не удалось сохранить результат игры игрока "${playerName}" на сервер из-за ошибки: ${error}`);
-          window.console.warn(`Работа будет продолжена в автономном режиме.`);
+          window.console.error(messageRepository.getMessage(MessageId.ERROR_GAME_SAVE, {playerName, error}));
+          window.console.warn(messageRepository.getMessage(MessageId.WARNING_CONTINUE_APP_OFFLINE));
           location.hash = Application._createHash(ScreenId.STATS, stateResultCode);
         });
   }
@@ -86,8 +87,8 @@ export default class Application {
           return levels;
         })
         .catch((error) => {
-          window.console.error(`Не удалось загрузить уровни игры с сервера из-за ошибки: ${error}`);
-          window.console.warn(`Работа будет продолжена в автономном режиме.`);
+          window.console.error(messageRepository.getMessage(MessageId.ERROR_GAME_LEVELS_LOADING, {error}));
+          window.console.warn(messageRepository.getMessage(MessageId.WARNING_CONTINUE_APP_OFFLINE));
           Application.init(generateLevels());
         })
         .then((levels) => imagesRepository.loadImages(levels, () => {
@@ -95,8 +96,8 @@ export default class Application {
           Application._routing(hash);
         }))
         .catch((error) => {
-          window.console.error(`Неустранимая ошибка. Продолжение работы программы невозможно.`);
-          window.console.error(`Не удалось загрузить данные игры из-за ошибки: ${error}`);
+          window.console.error(messageRepository.getMessage(MessageId.ERROR_UNRECOVERABLE));
+          window.console.error(messageRepository.getMessage(MessageId.ERROR_GAME_CANNOT_LOAD_DATA, {error}));
         });
   }
 }

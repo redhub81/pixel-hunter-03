@@ -1,6 +1,7 @@
 /** @module screens/stats/stats-screen */
 
 import gameConventions from '../../config/game-conventions';
+import messageRepository from '../../config/message-repository';
 import contentPresenter from '../../content-presenter';
 import Application from '../../application';
 import GameDataLoader from '../../data/server-data-loader';
@@ -9,7 +10,7 @@ import {gameProgressEncoder} from '../../data/encoders/progress-encoder';
 import StatsModel from './stats-model';
 import StatsView from './stats-view';
 
-const {OrderDirection} = gameConventions;
+const {OrderDirection, MessageId} = gameConventions;
 
 
 class StatsScreen {
@@ -30,8 +31,8 @@ class StatsScreen {
           this._update(resultsData);
         })
         .catch((error) => {
-          window.console.error(`Не удалось загрузить с сервера результаты предыдущих игр игрока "${playerName}" из-за ошибки: ${error}`);
-          window.console.warn(`Работа будет продолжена в автономном режиме.`);
+          window.console.error(messageRepository.getMessage(MessageId.ERROR_GAME_STATS_NOT_LOADED, {playerName, error}));
+          window.console.warn(messageRepository.getMessage(MessageId.WARNING_CONTINUE_APP_OFFLINE));
           const resultsData = resultData.hasResultState ? [resultData] : [];
           this._update(resultsData);
         });

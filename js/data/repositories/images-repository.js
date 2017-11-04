@@ -1,10 +1,11 @@
 /** @module data/repositories/images-repository */
 
 import gameConventions from '../../config/game-conventions';
+import messageRepository from '../../config/message-repository';
 import mathHelper from '../../helpers/math-helper';
 import {createImage} from '../factories/levels-factory';
 
-const {ImageType} = gameConventions;
+const {ImageType, MessageId} = gameConventions;
 
 
 const imageSourcePrefix = `imageSource`;
@@ -47,30 +48,31 @@ const imagesRepository = {
     });
   },
   _loadImage: (url) => {
-    return new Promise((onLoad, onError) => {
+    return new Promise((resolve, reject) => {
       const image = new Image();
-      image.onload = () => onLoad(image);
-      image.onerror = () => onError(`Не удалось загрузить изображение: ${url}`);
+      image.onload = () => resolve(image);
+      image.onerror = () => reject(messageRepository.getMessage(MessageId.ERROR_GAME_LEVEL_IMAGE_NOT_LOADED, {url}));
       image.src = url;
+    });
+  },
+  _prepareImages() {
+    return new Promise((resolve) => {
+      const photos = imageSourcesByType[createSourceKey(ImageType.PHOTO)];
+      const paintings = imageSourcesByType[createSourceKey(ImageType.PAINTING)];
+      resolve(photos.concat(paintings));
     });
   },
   loadImages: (levels, onLoadCallback) => {
     imagesRepository._updateSources(levels);
-
-    const prepareGameImages = (new Promise((onPrepared) => {
-      const photos = imageSourcesByType[createSourceKey(ImageType.PHOTO)];
-      const paintings = imageSourcesByType[createSourceKey(ImageType.PAINTING)];
-      onPrepared(photos.concat(paintings));
-    }));
-    prepareGameImages
-        .then((gameImages) => gameImages.map((gameImage) => imagesRepository._loadImage(gameImage.location)))
-        .then((loadImagePromises) => {
+    imagesRepository._prepareImages()
+        .then((gameImages) => {
+          const loadImagePromises = gameImages.map((gameImage) => imagesRepository._loadImage(gameImage.location));
           Promise.all(loadImagePromises);
           onLoadCallback();
         })
         .catch((error) => {
-          window.console.error(`Не удалось загрузить изображения уровней из-за ошибки: ${error}`);
-          window.console.warn(`Работа приложения будет продолжена.`);
+          window.console.error(messageRepository.getMessage(MessageId.ERROR_GAME_LEVEL_IMAGES_NOT_LOADED, {error}));
+          window.console.warn(messageRepository.getMessage(MessageId.WARNING_CONTINUE_APP_WORKING));
         });
   },
   getRandomImage(imageType) {

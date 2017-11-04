@@ -83,6 +83,9 @@ export default class GameModel {
     this._timer.ticksCount = TotalCount.TIME;
     this._timer.start();
   }
+  continueTimer() {
+    this._timer.start();
+  }
   stopTimer() {
     this._timer.stop();
   }
