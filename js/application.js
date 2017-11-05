@@ -87,7 +87,9 @@ export default class Application {
           window.console.warn(messageRepository.getMessage(MessageId.WARNING_CONTINUE_APP_OFFLINE));
           return generateLevels();
         })
-        .then((levels) => imagesRepository.loadImages(levels).then(() => levels))
+        .then((levels) => {
+          return imagesRepository.loadImages(levels).then(() => levels);
+        })
         .then((levels) => {
           Application.init(levels);
           const hash = Application._getRouteData();

@@ -71,6 +71,10 @@ const createImagesWithOneOfTargetTypeOnly = (count, targetImageType) => {
   return createDifferentImages(imageTypes);
 };
 
+const imageTinderLikeSize = {width: 705, height: 455};
+const imageTwoOfTwoSize = {width: 468, height: 458};
+const imageOneOfThreeSize = {width: 304, height: 455};
+
 const getLevelGeneratorKey = (levelType) => `${CREATE_METHOD_PREFIX}-${levelType}`;
 const levelGeneratorByKey = {
   [getLevelGeneratorKey(LevelType.TYPE_OF_ONE_IMAGE)]: (levelBase) => {
@@ -78,7 +82,11 @@ const levelGeneratorByKey = {
     levelBase.description = `Угадай, фото или рисунок?`;
 
     levelBase.images.length = 0;
-    createImagesWithRandomType(1).forEach((it) => levelBase.images.push(it));
+    createImagesWithRandomType(1).forEach((gameImage) => {
+      gameImage.width = imageTinderLikeSize.width;
+      gameImage.height = imageTinderLikeSize.height;
+      levelBase.images.push(gameImage);
+    });
 
     levelBase.answerCode = answerEncoder.encode(levelBase.images.map((it) => it.imageType));
 
@@ -89,7 +97,11 @@ const levelGeneratorByKey = {
     level.description = `Угадайте для каждого изображения фото или рисунок?`;
 
     level.images.length = 0;
-    createDifferentImagesWithRandomType(2).forEach((it) => level.images.push(it));
+    createDifferentImagesWithRandomType(2).forEach((gameImage) => {
+      gameImage.width = imageTwoOfTwoSize.width;
+      gameImage.height = imageTwoOfTwoSize.height;
+      level.images.push(gameImage);
+    });
 
     level.answerCode = answerEncoder.encode(level.images.map((it) => it.imageType));
 
@@ -101,7 +113,11 @@ const levelGeneratorByKey = {
 
     level.images.length = 0;
     createImagesWithOneOfTargetTypeOnly(3, ImageType.PHOTO)
-        .forEach((it) => level.images.push(it));
+        .forEach((gameImage) => {
+          gameImage.width = 304;
+          gameImage.height = 455;
+          level.images.push(gameImage);
+        });
 
     level.answerCode = answerEncoder.encode(level.images.map((it) => it.imageType));
 
@@ -113,7 +129,11 @@ const levelGeneratorByKey = {
 
     level.images.length = 0;
     createImagesWithOneOfTargetTypeOnly(3, ImageType.PAINTING)
-        .forEach((it) => level.images.push(it));
+        .forEach((gameImage) => {
+          gameImage.width = imageOneOfThreeSize.width;
+          gameImage.height = imageOneOfThreeSize.height;
+          level.images.push(gameImage);
+        });
 
     level.answerCode = answerEncoder.encode(level.images.map((it) => it.imageType));
 
