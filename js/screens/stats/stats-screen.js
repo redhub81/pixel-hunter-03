@@ -44,6 +44,7 @@ class StatsScreen {
     this._view.updateResults();
   }
   init(resultCode) {
+    this._model.clear();
     contentPresenter.change(this._view);
     this._view.update();
 

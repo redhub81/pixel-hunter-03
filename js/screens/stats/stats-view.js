@@ -35,6 +35,8 @@ export default class StatsView extends AbstractView {
   }
   update() {
     this.updateHeader();
+    this.updateTitle();
+    this.updateResults();
     this.updateFooter();
   }
   updateHeader() {
@@ -46,7 +48,12 @@ export default class StatsView extends AbstractView {
     };
   }
   updateTitle() {
-    const titleView = new TitleView(this.model.results[0]);
+    contentPresenter.clear(this._titleContainer);
+    if (this.model.results.length === 0) {
+      return;
+    }
+    const titleModel = this.model.results[0];
+    const titleView = new TitleView(titleModel);
     contentPresenter.change(titleView, this._titleContainer);
     this._titleView = titleView;
   }

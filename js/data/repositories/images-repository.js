@@ -8,12 +8,11 @@ import {createImage} from '../factories/levels-factory';
 const {ImageType, MessageId} = gameConventions;
 
 
-const imageSourcePrefix = `imageSource`;
-const createSourceKey = (imageType) => `${imageSourcePrefix}-${imageType}`;
-
 const createPhoto = (location, width, height) => createImage(ImageType.PHOTO, location, width, height);
 const createPainting = (location, width, height) => createImage(ImageType.PAINTING, location, width, height);
 
+const imageSourcePrefix = `imageSource`;
+const createSourceKey = (imageType) => `${imageSourcePrefix}-${imageType}`;
 const imageSourcesByType = {
   [createSourceKey(ImageType.PHOTO)]: [
     // People
@@ -34,15 +33,7 @@ const imageSourcesByType = {
 };
 
 
-const createBlobURL = (blob) => {
-  const URL = window.URL || window.webkitURL;
-  return URL.createObjectURL(blob);
-};
-
 const imagesRepository = {
-  _findSourceImage: (source, location) => {
-    return source.find((it) => it.location === location);
-  },
   _updateSources: (levels) => {
     if (!levels) {
       return;
@@ -50,7 +41,8 @@ const imagesRepository = {
     levels.forEach((level) => {
       level.images.forEach((gameImage) => {
         const source = imageSourcesByType[createSourceKey(gameImage.imageType)];
-        if (!imagesRepository._findSourceImage(source, gameImage.location)) {
+        const sourceImage = source.find((it) => it.location === gameImage.location);
+        if (!sourceImage) {
           source.push(createImage(gameImage.imageType, gameImage.location, gameImage.width, gameImage.height));
         }
       });
@@ -71,23 +63,6 @@ const imagesRepository = {
       window.console.warn(messageRepository.getMessage(MessageId.WARNING_CONTINUE_APP_WORKING));
     });
   },
-  _fetchImage: (url) => {
-    return fetch(url)
-        .then((response) => {
-          if (response.ok) {
-            return response.blob();
-          }
-          throw new Error(messageRepository.getMessage(MessageId.ERROR_NETWORK_RESPONSE_NOT_OK, `${response.status} ${response.statusText}`));
-        })
-        .then((blob) => {
-          return createBlobURL(blob);
-        })
-        .catch((error) => {
-          window.console.error(messageRepository.getMessage(MessageId.ERROR_NETWORK_IMAGE_NOT_LOADED, {url, error}));
-          window.console.warn(messageRepository.getMessage(MessageId.WARNING_CONTINUE_APP_WORKING));
-          return imagesRepository._loadImage(url).then(() => url);
-        });
-  },
   _prepareImages() {
     return new Promise((resolve) => {
       const photos = imageSourcesByType[createSourceKey(ImageType.PHOTO)];
@@ -100,22 +75,9 @@ const imagesRepository = {
     return imagesRepository._prepareImages()
         .then((gameImages) => {
           const loadImagePromises = gameImages.map((gameImage) => {
-            return imagesRepository._fetchImage(gameImage.location).then((url) => {
-              gameImage.src = url;
-            });
+            return imagesRepository._loadImage(gameImage.location);
           });
           return Promise.all(loadImagePromises);
-        })
-        .then(() => {
-          levels.forEach((gameLevel) => {
-            gameLevel.images.forEach((gameImage) => {
-              const source = imageSourcesByType[createSourceKey(gameImage.imageType)];
-              const sourceImage = imagesRepository._findSourceImage(source, gameImage.location);
-              gameImage.src = (sourceImage)
-                ? sourceImage.src
-                : gameImage.location;
-            });
-          });
         });
   },
   getRandomImage(imageType) {

@@ -85,9 +85,7 @@ export default class Application {
         .catch((error) => {
           window.console.error(messageRepository.getMessage(MessageId.ERROR_GAME_LEVELS_LOADING, {error}));
           window.console.warn(messageRepository.getMessage(MessageId.WARNING_CONTINUE_APP_OFFLINE));
-          const levels = generateLevels();
-          Application.init(levels);
-          return levels;
+          return generateLevels();
         })
         .then((levels) => imagesRepository.loadImages(levels).then(() => levels))
         .then((levels) => {

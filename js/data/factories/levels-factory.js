@@ -11,7 +11,6 @@ export const createImage = function (imageType, location, width = 0, height = 0)
     location,
     width,
     height,
-    src: ``,
   };
 };
 

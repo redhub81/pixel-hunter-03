@@ -63,10 +63,13 @@ const createResultModel = function (gameResult) {
 
 class StatsModel {
   constructor() {
-    this._results = [];
+    this.clear();
   }
   get results() {
     return this._results;
+  }
+  clear() {
+    this._results = [];
   }
   update(resultsData) {
     this._results = resultsData.map((resultData) => {
