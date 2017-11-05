@@ -82,19 +82,19 @@ export default class Application {
     GameDataLoader.init(gameServer);
     GameDataLoader.loadQuestions()
         .then(adapt)
-        .then((levels) => {
-          Application.init(levels);
-          return levels;
-        })
         .catch((error) => {
           window.console.error(messageRepository.getMessage(MessageId.ERROR_GAME_LEVELS_LOADING, {error}));
           window.console.warn(messageRepository.getMessage(MessageId.WARNING_CONTINUE_APP_OFFLINE));
-          Application.init(generateLevels());
+          const levels = generateLevels();
+          Application.init(levels);
+          return levels;
         })
-        .then((levels) => imagesRepository.loadImages(levels, () => {
+        .then((levels) => imagesRepository.loadImages(levels).then(() => levels))
+        .then((levels) => {
+          Application.init(levels);
           const hash = Application._getRouteData();
           Application._routing(hash);
-        }))
+        })
         .catch((error) => {
           window.console.error(messageRepository.getMessage(MessageId.ERROR_UNRECOVERABLE));
           window.console.error(messageRepository.getMessage(MessageId.ERROR_GAME_CANNOT_LOAD_DATA, {error}));

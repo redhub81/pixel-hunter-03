@@ -43,7 +43,7 @@ export default class GameThreeView extends AbstractView {
   static _getOptionTemplate(data) {
     return `\
       <div class="game__option">
-        <img src="${data.location}" alt="Option 1" width="304" height="455">
+        <img src="${data.src}" alt="Option 1" width="304" height="455">
       </div>`;
   }
   /** Геттер template создает разметку экрана. */

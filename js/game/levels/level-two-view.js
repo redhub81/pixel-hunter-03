@@ -27,7 +27,7 @@ export default class GameTwoView extends AbstractView {
         <p class="game__task">${this.model.level.description}</p>
         <form class="game__content  game__content--wide">
           <div class="game__option">
-            <img src="${this.model.level.images[0].location}" alt="Option 1" width="705" height="455">
+            <img src="${this.model.level.images[0].src}" alt="Option 1" width="705" height="455">
             <label class="game__answer  game__answer--photo">
               <input name="question1" type="radio" value="${ImageType.PHOTO}">
               <span>Фото</span>

@@ -2,6 +2,7 @@
 
 const mainContentElement = document.querySelector(`main.central`);
 
+
 export default {
   /** Оцищает контейнер отображения.
    * @param {object} container - Контейнер отображения.

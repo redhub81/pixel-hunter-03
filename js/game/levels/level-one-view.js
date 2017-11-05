@@ -28,7 +28,7 @@ export default class GameOneView extends AbstractView {
   static _getOptionTemplate(name, data) {
     return `\
       <div class="game__option">
-        <img src="${data.location}" alt="Option 1" width="468" height="458">
+        <img src="${data.src}" alt="Option 1" width="468" height="458">
         <label class="game__answer game__answer--photo">
           <input name="${name}" type="radio" value="${ImageType.PHOTO}">
           <span>Фото</span>
