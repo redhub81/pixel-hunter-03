@@ -108,6 +108,13 @@ const OrderDirection = {
   DESC: -1,
 };
 
+/** Статусы сетевых ошибок.
+ * @enum {string}
+ */
+const NetworkResponseStatus = {
+  NotFound: 404,
+};
+
 /** Идентификаторы сообщений
  * @enum {string}
  */
@@ -115,14 +122,16 @@ const MessageId = {
   WARNING_CONTINUE_APP_WORKING: `warningContinueAppWorking`,
   WARNING_CONTINUE_APP_OFFLINE: `warningContinueAppOffline`,
   ERROR_UNRECOVERABLE: `errorUnrecoverable`,
+  ERROR_LOADER_STATS_NAME_ABSENT: `errorLoaderStatsNameAbsent`,
+  ERROR_LOADER_STATS_DATA_ABSENT: `errorLoaderStatsDataAbsent`,
+  ERROR_NETWORK_RESPONSE_NOT_OK: `errorNetworkResponseNotOk`,
+  ERROR_NETWORK_IMAGE_NOT_LOADED: `errorNetworkImageNotLoaded`,
   ERROR_GAME_SAVE: `errorSaveGame`,
   ERROR_GAME_LEVELS_LOADING: `errorGameLevelsLoading`,
   ERROR_GAME_CANNOT_LOAD_DATA: `errorGameCannotLoadData`,
-  ERROR_GAME_LEVEL_IMAGE_NOT_LOADED: `errorGameLevelImageNotLoaded`,
-  ERROR_GAME_LEVEL_IMAGES_NOT_LOADED: `errorGameLevelImagesNotLoaded`,
+  ERROR_GAME_LEVEL_IMAGE_NOT_LOADED: `errorGameLevelImagesNotLoaded`,
   ERROR_GAME_STATS_NOT_LOADED: `errorGameStatsNotLoaded`,
 };
-
 
 export default {
   ScoreLimits,
@@ -135,5 +144,6 @@ export default {
   ImageCode,
   ScreenId,
   OrderDirection,
-  MessageId
+  NetworkResponseStatus,
+  MessageId,
 };

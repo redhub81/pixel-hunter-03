@@ -5,8 +5,7 @@ import AbstractView from '../../abstract-view';
 import FooterView from '../../views/footer-view';
 
 export default class GreetingView extends AbstractView {
-  /** Конструктор.
-   */
+  /** Конструктор. */
   constructor() {
     super(null);
   }

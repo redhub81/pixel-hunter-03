@@ -6,9 +6,6 @@ import gameSettings from '../config/game-settings';
 const {TotalCount} = gameSettings;
 
 
-/* Экспорт интерфейса модуля.
- *************************************************************************************************/
-
 export default class HeaderView extends AbstractView {
   /** Конструктор.
    * @param {object} model - модель данных.

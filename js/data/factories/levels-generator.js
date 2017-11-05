@@ -5,7 +5,7 @@ import gameSettings from '../../config/game-settings';
 import mathHelper from '../../helpers/math-helper';
 import imagesRepository from '../repositories/images-repository';
 import answerEncoder from '../encoders/answer-encoder';
-import {createImage, createLevel} from './levels-factory';
+import {createLevel} from './levels-factory';
 
 const {LevelType, ImageType} = gameConventions;
 const {TotalCount} = gameSettings;
@@ -38,12 +38,12 @@ const createImagesWithRandomType = (count) => new Array(count).fill(void 0)
 
 const createDifferentImages = (imageTypes) => {
   const images = [];
-  imageTypes.forEach((it) => {
-    let location = imagesRepository.getRandomImage(it);
-    while (images.find((img) => img.location === location)) {
-      location = imagesRepository.getRandomImage(it);
+  imageTypes.forEach((imageType) => {
+    let randomImage = imagesRepository.getRandomImage(imageType);
+    while (images.find((img) => img.location === randomImage.location)) {
+      randomImage = imagesRepository.getRandomImage(imageType);
     }
-    images.push(createImage(it, location));
+    images.push(randomImage);
   });
   return images;
 };

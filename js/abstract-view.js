@@ -2,6 +2,7 @@
 
 import contentBuilder from './content-builder';
 
+
 /**
  * Абстрактный базовый класс для представлений.
  */

@@ -8,12 +8,11 @@ import {createImage} from '../factories/levels-factory';
 const {ImageType, MessageId} = gameConventions;
 
 
-const imageSourcePrefix = `imageSource`;
-const createSourceKey = (imageType) => `${imageSourcePrefix}-${imageType}`;
-
 const createPhoto = (location, width, height) => createImage(ImageType.PHOTO, location, width, height);
 const createPainting = (location, width, height) => createImage(ImageType.PAINTING, location, width, height);
 
+const imageSourcePrefix = `imageSource`;
+const createSourceKey = (imageType) => `${imageSourcePrefix}-${imageType}`;
 const imageSourcesByType = {
   [createSourceKey(ImageType.PHOTO)]: [
     // People
@@ -33,6 +32,7 @@ const imageSourcesByType = {
   ],
 };
 
+
 const imagesRepository = {
   _updateSources: (levels) => {
     if (!levels) {
@@ -41,7 +41,8 @@ const imagesRepository = {
     levels.forEach((level) => {
       level.images.forEach((gameImage) => {
         const source = imageSourcesByType[createSourceKey(gameImage.imageType)];
-        if (source.indexOf(gameImage.location) < 0) {
+        const sourceImage = source.find((it) => it.location === gameImage.location);
+        if (!sourceImage) {
           source.push(createImage(gameImage.imageType, gameImage.location, gameImage.width, gameImage.height));
         }
       });
@@ -50,9 +51,16 @@ const imagesRepository = {
   _loadImage: (url) => {
     return new Promise((resolve, reject) => {
       const image = new Image();
-      image.onload = () => resolve(image);
-      image.onerror = () => reject(messageRepository.getMessage(MessageId.ERROR_GAME_LEVEL_IMAGE_NOT_LOADED, {url}));
+      image.onload = () => {
+        resolve(image);
+      };
+      image.onerror = () => {
+        reject(messageRepository.getMessage(MessageId.ERROR_NETWORK_IMAGE_NOT_LOADED, {url}));
+      };
       image.src = url;
+    }).catch((error) => {
+      window.console.error(messageRepository.getMessage(MessageId.ERROR_GAME_LEVEL_IMAGE_NOT_LOADED, {error}));
+      window.console.warn(messageRepository.getMessage(MessageId.WARNING_CONTINUE_APP_WORKING));
     });
   },
   _prepareImages() {
@@ -62,17 +70,14 @@ const imagesRepository = {
       resolve(photos.concat(paintings));
     });
   },
-  loadImages: (levels, onLoadCallback) => {
+  loadImages: (levels) => {
     imagesRepository._updateSources(levels);
-    imagesRepository._prepareImages()
+    return imagesRepository._prepareImages()
         .then((gameImages) => {
-          const loadImagePromises = gameImages.map((gameImage) => imagesRepository._loadImage(gameImage.location));
+          const loadImagePromises = gameImages.map((gameImage) => {
+            return imagesRepository._loadImage(gameImage.location);
+          });
           return Promise.all(loadImagePromises);
-        })
-        .then(() => onLoadCallback())
-        .catch((error) => {
-          window.console.error(messageRepository.getMessage(MessageId.ERROR_GAME_LEVEL_IMAGES_NOT_LOADED, {error}));
-          window.console.warn(messageRepository.getMessage(MessageId.WARNING_CONTINUE_APP_WORKING));
         });
   },
   getRandomImage(imageType) {

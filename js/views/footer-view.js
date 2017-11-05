@@ -3,9 +3,6 @@
 import AbstractView from '../abstract-view';
 
 
-/* Экспорт интерфейса модуля.
- *************************************************************************************************/
-
 export default class FooterView extends AbstractView {
   /** Конструктор. */
   constructor() {
