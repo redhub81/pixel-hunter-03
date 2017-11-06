@@ -62,8 +62,10 @@ export default class GameView extends AbstractView {
   beginTimeBlinking() {
     this._headerView.beginTimeBlinking();
   }
+  /** Вызывается при ответе пользователя на вопрос задания. */
   onAnswer() {
   }
+  /** Вызывается в ответ на инициацию пользователем действия возврата. */
   onGoBack() {
   }
 }

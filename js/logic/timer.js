@@ -18,6 +18,19 @@ export default class Timer {
     this._tickCallback = tickCallback;
     this.ticksCount = ticksCount;
   }
+  get ticksCount() {
+    return this._ticksCount;
+  }
+  set ticksCount(value) {
+    const ticksCount = Math.floor(value);
+    if (ticksCount < 0) {
+      throw new Error(`The argument 'ticksCount' must be not less than zero.`);
+    }
+    if (this._isRunning) {
+      throw new Error(`The timer is running. You have to stop it before set the ticksCount.`);
+    }
+    this._ticksCount = ticksCount;
+  }
   _wait() {
     this._timerId = setTimeout(() => {
       this._timerId = null;
@@ -43,19 +56,6 @@ export default class Timer {
     if (this._finalCallback) {
       this._finalCallback();
     }
-  }
-  get ticksCount() {
-    return this._ticksCount;
-  }
-  set ticksCount(value) {
-    const ticksCount = Math.floor(value);
-    if (ticksCount < 0) {
-      throw new Error(`The argument 'ticksCount' must be not less than zero.`);
-    }
-    if (this._isRunning) {
-      throw new Error(`The timer is running. You have to stop it before set the ticksCount.`);
-    }
-    this._ticksCount = ticksCount;
   }
   tick() {
     if (this._ticksCount === 0) {

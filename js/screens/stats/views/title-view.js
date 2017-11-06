@@ -7,7 +7,8 @@ const {ResultType} = gameConventions;
 
 
 export default class ResultView extends AbstractView {
-  /** Конструктор.
+  /**
+   * Конструктор.
    * @param {object} model - модель данных.
    */
   constructor(model) {

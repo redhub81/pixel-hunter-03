@@ -28,15 +28,13 @@ const getStatuses = (answers) => {
 };
 
 export default class ProgressView extends AbstractView {
-  /** Конструктор.
+  /**
+   * Конструктор.
    * @param {object} model - модель данных.
    */
   constructor(model) {
     const viewModel = getStatuses(model);
     super(viewModel);
-  }
-  static _getStatusTemplate(model) {
-    return `<li class="stats__result stats__result--${model}"></li>`;
   }
   /** Геттер template создает разметку экрана */
   get template() {
@@ -44,5 +42,8 @@ export default class ProgressView extends AbstractView {
       <ul class="stats">
         ${this.model.map(ProgressView._getStatusTemplate).join(`\n`)}
       </ul>`;
+  }
+  static _getStatusTemplate(model) {
+    return `<li class="stats__result stats__result--${model}"></li>`;
   }
 }

@@ -4,6 +4,9 @@ import gameSettings from '../config/game-settings';
 
 const {TotalCount} = gameSettings;
 
+/**
+ * Начальное состояние игры.
+ * */
 export const initialGameStateData = {
   playerName: ``,
   levelNumber: 0,

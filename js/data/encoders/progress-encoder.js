@@ -70,8 +70,7 @@ export const gameProgressEncoder = {
                 return innerData[key];
               }, data));
         });
-    const code = fields.join(``);
-    return code;
+    return fields.join(``);
   },
   decode: (code, includeName = true, initialData = {}) => {
     return gameProgressFieldsEncoders

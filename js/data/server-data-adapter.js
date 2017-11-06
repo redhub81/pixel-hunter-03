@@ -27,17 +27,17 @@ const levelFactoryByQuestionType = {
   }
 };
 
-export const convertToGameImageType = (serverImageType) => {
+const convertToGameImageType = (serverImageType) => {
   const imageTypeKey = Object.keys(AnswerType).find((key) => AnswerType[key] === serverImageType);
   return ImageType[imageTypeKey];
 };
 
-export const convertToGameImage = ({type: typeData, image: imageData}) => {
+const convertToGameImage = ({type: typeData, image: imageData}) => {
   const imageType = convertToGameImageType(typeData);
   return createImage(imageType, imageData.url, imageData.width, imageData.height);
 };
 
-export const convertToGameLevel = ({type: typeData, question: questionData, answers: answersData}) => {
+const convertToGameLevel = ({type: typeData, question: questionData, answers: answersData}) => {
   const levelFactory = levelFactoryByQuestionType[typeData];
   const level = levelFactory(answersData);
   level.description = questionData;

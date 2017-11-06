@@ -6,9 +6,9 @@ import Application from '../application';
 import contentPresenter from '../content-presenter';
 import GameModel from './game-model';
 import GameView from './game-view';
-import levelOneView from './levels/level-one-view';
-import levelTwoView from './levels/level-two-view';
-import levelThreeView from './levels/level-three-view';
+import LevelOneView from './levels/level-one-view';
+import LevelTwoView from './levels/level-two-view';
+import LevelThreeView from './levels/level-three-view';
 import {initialGameStateData} from '../data/game-data';
 
 const {TimeSteps} = gameSettings;
@@ -17,10 +17,10 @@ const {LevelType} = gameConventions;
 
 const getLevelTypeKey = (levelType) => `level-${levelType}`;
 const screenByLevelType = {
-  [getLevelTypeKey(LevelType.TYPE_OF_ONE_IMAGE)]: levelTwoView,
-  [getLevelTypeKey(LevelType.TYPE_OF_TWO_IMAGES)]: levelOneView,
-  [getLevelTypeKey(LevelType.PHOTO_AMONG_THREE_IMAGES)]: levelThreeView,
-  [getLevelTypeKey(LevelType.PAINTING_AMONG_THREE_IMAGES)]: levelThreeView,
+  [getLevelTypeKey(LevelType.TYPE_OF_ONE_IMAGE)]: LevelTwoView,
+  [getLevelTypeKey(LevelType.TYPE_OF_TWO_IMAGES)]: LevelOneView,
+  [getLevelTypeKey(LevelType.PHOTO_AMONG_THREE_IMAGES)]: LevelThreeView,
+  [getLevelTypeKey(LevelType.PAINTING_AMONG_THREE_IMAGES)]: LevelThreeView,
 };
 const getLevelView = (levelType) => {
   const levelTypeKey = getLevelTypeKey(levelType);

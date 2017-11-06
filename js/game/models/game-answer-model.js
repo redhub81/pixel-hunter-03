@@ -1,4 +1,4 @@
-/** @module game/models/game-state-model */
+/** @module game/models/game-answer-model */
 
 import gameConventions from '../../config/game-conventions';
 import gameSettings from '../../config/game-settings';
@@ -11,6 +11,25 @@ export default class GameAnswerModel {
   constructor(resultType, speed) {
     this._resultType = resultType;
     this._speed = speed;
+  }
+  get resultType() {
+    return this._resultType;
+  }
+  get resultCode() {
+    if (!this.resultType) {
+      return null;
+    }
+    if (this.resultType === ResultType.WRONG) {
+      return ResultCode.WRONG;
+    }
+    switch (this.speed) {
+      case SpeedType.FAST: return ResultCode.FAST;
+      case SpeedType.SLOW: return ResultCode.SLOW;
+      default: return ResultCode.CORRECT;
+    }
+  }
+  get speed() {
+    return this._speed;
   }
   static create({isRight, time}) {
     const resultType = GameAnswerModel._getResultType(isRight);
@@ -33,24 +52,5 @@ export default class GameAnswerModel {
       }
     }
     return speed;
-  }
-  get resultType() {
-    return this._resultType;
-  }
-  get resultCode() {
-    if (!this.resultType) {
-      return null;
-    }
-    if (this.resultType === ResultType.WRONG) {
-      return ResultCode.WRONG;
-    }
-    switch (this.speed) {
-      case SpeedType.FAST: return ResultCode.FAST;
-      case SpeedType.SLOW: return ResultCode.SLOW;
-      default: return ResultCode.CORRECT;
-    }
-  }
-  get speed() {
-    return this._speed;
   }
 }

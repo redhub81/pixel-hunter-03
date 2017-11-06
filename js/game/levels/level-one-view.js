@@ -1,4 +1,4 @@
-/** @module game/levels/game-one-view */
+/** @module game/levels/level-one-view */
 
 import gameConventions from '../../config/game-conventions';
 import contentPresenter from '../../content-presenter';
@@ -13,40 +13,23 @@ const {ImageType} = gameConventions;
 /*
  * Представление типа игры с двумя изображениями.
  */
-export default class GameOneView extends AbstractView {
+export default class LevelOneView extends AbstractView {
   /** Конструктор.
    * @param {object} model - модель данных.
    */
   constructor(model) {
     super(model);
     this._responses = [];
-    this._questionNames = ([0, 1]).map((it) => GameOneView._getQuestionName(it));
+    this._questionNames = ([0, 1]).map((it) => LevelOneView._getQuestionName(it));
   }
-  static _getQuestionName(number) {
-    return `question${number}`;
-  }
-  static _getOptionTemplate(name, imageVM) {
-    return `\
-      <div class="game__option">
-        <img src="${imageVM.location}" alt="${imageVM.alt}" width="${imageVM.size.width}" height="${imageVM.size.height}">
-        <label class="game__answer game__answer--photo">
-          <input name="${name}" type="radio" value="${ImageType.PHOTO}">
-          <span>Фото</span>
-        </label>
-        <label class="game__answer game__answer--paint">
-          <input name="${name}" type="radio" value="${ImageType.PAINTING}">
-          <span>Рисунок</span>
-        </label>
-      </div>`;
-  }
-  /** Геттер template создает разметку экрана. */
+  /** Геттер template создает разметку. */
   get template() {
     return `\
       <div class="game">
         <p class="game__task">${this.model.level.description}</p>
         <form class="game__content">
-          ${GameOneView._getOptionTemplate(this._questionNames[0], new ImageViewModel(this.model.level.images[0], 0))}
-          ${GameOneView._getOptionTemplate(this._questionNames[1], new ImageViewModel(this.model.level.images[1], 1))}
+          ${LevelOneView._getOptionTemplate(this._questionNames[0], new ImageViewModel(this.model.level.images[0], 0))}
+          ${LevelOneView._getOptionTemplate(this._questionNames[1], new ImageViewModel(this.model.level.images[1], 1))}
         </form>
         <div class="stats"></div>
       </div>`;
@@ -77,7 +60,24 @@ export default class GameOneView extends AbstractView {
     contentPresenter.change(progressView, this._statsContainer);
     this._progressView = progressView;
   }
-  /** Вызывается при переходе на следующий уровень. */
+  /** Вызывается при ответе пользователя на вопрос задания. */
   onAnswer() {
+  }
+  static _getQuestionName(number) {
+    return `question${number}`;
+  }
+  static _getOptionTemplate(name, imageVM) {
+    return `\
+      <div class="game__option">
+        <img src="${imageVM.location}" alt="${imageVM.alt}" width="${imageVM.size.width}" height="${imageVM.size.height}">
+        <label class="game__answer game__answer--photo">
+          <input name="${name}" type="radio" value="${ImageType.PHOTO}">
+          <span>Фото</span>
+        </label>
+        <label class="game__answer game__answer--paint">
+          <input name="${name}" type="radio" value="${ImageType.PAINTING}">
+          <span>Рисунок</span>
+        </label>
+      </div>`;
   }
 }

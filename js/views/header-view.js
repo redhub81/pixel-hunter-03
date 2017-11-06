@@ -7,34 +7,12 @@ const {TotalCount} = gameSettings;
 
 
 export default class HeaderView extends AbstractView {
-  /** Конструктор.
+  /**
+   * Конструктор.
    * @param {object} model - модель данных.
    */
   constructor(model) {
     super(model);
-  }
-  static _getBackBar() {
-    return `\
-      <div class="header__back">
-        <button class="back">
-          <img src="img/arrow_left.svg" width="45" height="45" alt="Back">
-          <img src="img/logo_small.svg" width="101" height="44">
-        </button>
-      </div>`;
-  }
-  static _getTimeBar(time) {
-    return `\
-      <h1 class="game__timer">${time}</h1>`;
-  }
-  static _getLivesBar(livesCount) {
-    return `\
-      <div class="game__lives">
-        ${new Array(TotalCount.LIVES - livesCount)
-      .fill(`<img src="img/heart__empty.svg" class="game__heart" alt="Life" width="32" height="32">`)
-      .join(`\n`)}
-        ${new Array(livesCount)
-      .fill(`<img src="img/heart__full.svg" class="game__heart" alt="Life" width="32" height="32">`).join(`\n`)}
-      </div>`;
   }
   /** Геттер template создает разметку экрана */
   get template() {
@@ -62,5 +40,28 @@ export default class HeaderView extends AbstractView {
   }
   /** Вызывается при переходе на следующий уровень. */
   onBackClicked() {
+  }
+  static _getBackBar() {
+    return `\
+      <div class="header__back">
+        <button class="back">
+          <img src="img/arrow_left.svg" width="45" height="45" alt="Back">
+          <img src="img/logo_small.svg" width="101" height="44">
+        </button>
+      </div>`;
+  }
+  static _getTimeBar(time) {
+    return `\
+      <h1 class="game__timer">${time}</h1>`;
+  }
+  static _getLivesBar(livesCount) {
+    return `\
+      <div class="game__lives">
+        ${new Array(TotalCount.LIVES - livesCount)
+      .fill(`<img src="img/heart__empty.svg" class="game__heart" alt="Life" width="32" height="32">`)
+      .join(`\n`)}
+        ${new Array(livesCount)
+      .fill(`<img src="img/heart__full.svg" class="game__heart" alt="Life" width="32" height="32">`).join(`\n`)}
+      </div>`;
   }
 }

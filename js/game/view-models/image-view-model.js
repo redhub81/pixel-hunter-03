@@ -1,4 +1,4 @@
-/** @module screens/levels/game-one-view */
+/** @module game/view-models/image-view-model */
 
 import {resize} from '../../logic/resize';
 

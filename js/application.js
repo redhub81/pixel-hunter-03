@@ -6,7 +6,7 @@ import GameServer from './config/game-server';
 import GameDataLoader from './data/server-data-loader';
 import {adapt} from './data/server-data-adapter';
 import {generateLevels} from './data/factories/levels-generator';
-import {gameProgressEncoder} from "./data/encoders/progress-encoder";
+import {gameProgressEncoder} from './data/encoders/progress-encoder';
 import imagesRepository from './data/repositories/images-repository';
 import introScreen from './screens/intro/intro-screen';
 import greetingScreen from './screens/greeting/greeting-screen';
