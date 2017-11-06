@@ -1,8 +1,9 @@
 /** @module data/server-data-loader */
 
+import gameConventions from '../config/game-conventions';
 import messageRepository from '../config/message-repository';
 
-const {NetworkResponseStatus, MessageId} = messageRepository;
+const {NetworkResponseStatus, MessageId} = gameConventions;
 
 
 class GameDataLoader {

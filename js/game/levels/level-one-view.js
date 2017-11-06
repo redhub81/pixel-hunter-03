@@ -1,14 +1,14 @@
-/** @module screens/levels/game-one-view */
+/** @module game/levels/game-one-view */
 
 import gameConventions from '../../config/game-conventions';
 import contentPresenter from '../../content-presenter';
 import {raiseEvent} from '../../helpers/event-helper';
 import answerEncoder from '../../data/encoders/answer-encoder';
 import AbstractView from '../../abstract-view';
-import ProgressView from "../../views/progress-view";
+import ProgressView from '../../views/progress-view';
+import ImageViewModel from '../view-models/image-view-model';
 
 const {ImageType} = gameConventions;
-
 
 /*
  * Представление типа игры с двумя изображениями.
@@ -25,10 +25,10 @@ export default class GameOneView extends AbstractView {
   static _getQuestionName(number) {
     return `question${number}`;
   }
-  static _getOptionTemplate(name, data) {
+  static _getOptionTemplate(name, imageVM) {
     return `\
       <div class="game__option">
-        <img src="${data.location}" alt="Option 1" width="468" height="458">
+        <img src="${imageVM.location}" alt="${imageVM.alt}" width="${imageVM.size.width}" height="${imageVM.size.height}">
         <label class="game__answer game__answer--photo">
           <input name="${name}" type="radio" value="${ImageType.PHOTO}">
           <span>Фото</span>
@@ -45,8 +45,8 @@ export default class GameOneView extends AbstractView {
       <div class="game">
         <p class="game__task">${this.model.level.description}</p>
         <form class="game__content">
-          ${GameOneView._getOptionTemplate(this._questionNames[0], this.model.level.images[0])}
-          ${GameOneView._getOptionTemplate(this._questionNames[1], this.model.level.images[1])}
+          ${GameOneView._getOptionTemplate(this._questionNames[0], new ImageViewModel(this.model.level.images[0], 0))}
+          ${GameOneView._getOptionTemplate(this._questionNames[1], new ImageViewModel(this.model.level.images[1], 1))}
         </form>
         <div class="stats"></div>
       </div>`;

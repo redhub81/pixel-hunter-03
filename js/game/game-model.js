@@ -26,6 +26,9 @@ export default class GameModel {
     this._state.update(stateData, false);
     this._level = this._levels[this._state.levelNumber];
   }
+  _completeGame() {
+    this._isComplete = true;
+  }
   get state() {
     return this._state;
   }
@@ -48,10 +51,6 @@ export default class GameModel {
     this._isComplete = false;
     this._updateState(stateData);
   }
-  update(stateData) {
-    this._timer.stop();
-    this._updateState(stateData);
-  }
   completeLevel(answerCode) {
     const state = this._state;
     const timer = this._timer;
@@ -66,7 +65,7 @@ export default class GameModel {
     }
     const levelNumber = state.levelNumber + 1;
     if (state.livesCount < 0 || levelNumber === this._levels.length) {
-      this.completeGame();
+      this._completeGame();
       return;
     }
 
@@ -75,9 +74,6 @@ export default class GameModel {
     this._level = this._levels[levelNumber];
 
     timer.ticksCount = TotalCount.TIME;
-  }
-  completeGame() {
-    this._isComplete = true;
   }
   restartTimer() {
     this._timer.ticksCount = TotalCount.TIME;

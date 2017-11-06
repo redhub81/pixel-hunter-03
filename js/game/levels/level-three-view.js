@@ -1,4 +1,4 @@
-/** @module screens/levels/game-three-view */
+/** @module game/levels/game-three-view */
 
 import gameConventions from '../../config/game-conventions';
 import {raiseEvent} from '../../helpers/event-helper';
@@ -6,9 +6,9 @@ import contentPresenter from '../../content-presenter';
 import AbstractView from '../../abstract-view';
 import ProgressView from "../../views/progress-view";
 import answerEncoder from '../../data/encoders/answer-encoder';
+import ImageViewModel from '../view-models/image-view-model';
 
 const {LevelType, ImageType} = gameConventions;
-
 
 /*
  * Представление типа игры с тремя изображениями.
@@ -40,10 +40,10 @@ export default class GameThreeView extends AbstractView {
     }
     return null;
   }
-  static _getOptionTemplate(data) {
+  static _getOptionTemplate(imageVM) {
     return `\
       <div class="game__option">
-        <img src="${data.location}" alt="Option 1" width="304" height="455">
+        <img src="${imageVM.location}" alt="${imageVM.alt}" width="${imageVM.size.width}" height="${imageVM.size.height}">
       </div>`;
   }
   /** Геттер template создает разметку экрана. */
@@ -52,7 +52,7 @@ export default class GameThreeView extends AbstractView {
       <div class="game">
         <p class="game__task">${this.model.level.description}</p>
         <form class="game__content  game__content--triple">
-          ${this.model.level.images.map((it) => GameThreeView._getOptionTemplate(it)).join(`\n`)}
+          ${this.model.level.images.map((it, index) => GameThreeView._getOptionTemplate(new ImageViewModel(it, index))).join(`\n`)}
         </form>
         <div class="stats"></div>
       </div>`;

@@ -34,6 +34,9 @@ const imageSourcesByType = {
 
 
 const imagesRepository = {
+  _findSourceImage: (source, location) => {
+    return source.find((it) => it.location === location);
+  },
   _updateSources: (levels) => {
     if (!levels) {
       return;
@@ -41,8 +44,7 @@ const imagesRepository = {
     levels.forEach((level) => {
       level.images.forEach((gameImage) => {
         const source = imageSourcesByType[createSourceKey(gameImage.imageType)];
-        const sourceImage = source.find((it) => it.location === gameImage.location);
-        if (!sourceImage) {
+        if (!imagesRepository._findSourceImage(source, gameImage.location)) {
           source.push(createImage(gameImage.imageType, gameImage.location, gameImage.width, gameImage.height));
         }
       });
@@ -75,15 +77,30 @@ const imagesRepository = {
     return imagesRepository._prepareImages()
         .then((gameImages) => {
           const loadImagePromises = gameImages.map((gameImage) => {
-            return imagesRepository._loadImage(gameImage.location);
+            return imagesRepository._loadImage(gameImage.location)
+                .then((image) => {
+                  gameImage.imageSize = {width: image.width, height: image.height};
+                });
           });
           return Promise.all(loadImagePromises);
+        })
+        .then(() => {
+          levels.forEach((gameLevel) => {
+            gameLevel.images.forEach((gameImage) => {
+              const source = imageSourcesByType[createSourceKey(gameImage.imageType)];
+              const sourceImage = imagesRepository._findSourceImage(source, gameImage.location);
+              gameImage.imageSize = (sourceImage)
+                ? sourceImage.imageSize
+                : {width: gameImage.width, height: gameImage.height};
+            });
+          });
         });
   },
   getRandomImage(imageType) {
     const imageSource = imageSourcesByType[createSourceKey(imageType)];
     const imageIndex = mathHelper.getRandomInt(0, imageSource.length);
-    return imageSource[imageIndex];
+    const sourceImage = imageSource[imageIndex];
+    return createImage(sourceImage.imageType, sourceImage.location);
   }
 };
 

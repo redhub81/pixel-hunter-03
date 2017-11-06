@@ -8,6 +8,10 @@ const {LevelType} = gameConventions;
 export const createImage = function (imageType, location, width = 0, height = 0) {
   return {
     imageType,
+    imageSize: {
+      width: 0,
+      height: 0
+    },
     location,
     width,
     height,
