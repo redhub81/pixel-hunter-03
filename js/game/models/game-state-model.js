@@ -1,14 +1,10 @@
 /** @module game/models/game-state-model */
 
-import GameAnswerModel from "./game-answer-model";
+import GameAnswerModel from './game-answer-model';
+import {raiseEvent} from '../../helpers/event-helper';
 
 
 export default class GameStateModel {
-  _raiseOnChanged(data) {
-    if (this._needNotify && this._onChanged !== null) {
-      this.onChanged(data);
-    }
-  }
   get player() {
     return this._player;
   }
@@ -30,7 +26,7 @@ export default class GameStateModel {
   set time(value) {
     if (this._time !== value) {
       this._time = value;
-      this.onChanged({target: `time`});
+      this._raiseOnChanged({target: `time`});
     }
   }
   get answers() {
@@ -38,6 +34,11 @@ export default class GameStateModel {
   }
   set canNotify(value) {
     this._canNotify = value;
+  }
+  _raiseOnChanged(data) {
+    if (this._needNotify) {
+      raiseEvent(this.onChanged, data);
+    }
   }
   update(state, needNotify = true) {
     this._player = {

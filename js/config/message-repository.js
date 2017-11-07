@@ -23,7 +23,7 @@ const MessageFactories = {
 const messageRepository = {
   getMessage: (errorId, data) => {
     const messageFactory = MessageFactories[errorId];
-    return (messageFactory) ? messageFactory(data) : ``;
+    return (messageFactory) ? messageFactory(data) : `${data}`;
   }
 };
 

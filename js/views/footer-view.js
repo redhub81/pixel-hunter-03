@@ -4,7 +4,9 @@ import AbstractView from '../abstract-view';
 
 
 export default class FooterView extends AbstractView {
-  /** Конструктор. */
+  /**
+   * Конструктор.
+   * */
   constructor() {
     super(null);
   }

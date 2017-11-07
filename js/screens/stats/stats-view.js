@@ -9,7 +9,8 @@ import FooterView from '../../views/footer-view';
 
 
 export default class StatsView extends AbstractView {
-  /** Конструктор.
+  /**
+   * Конструктор.
    * @param {object} model - модель данных.
    */
   constructor(model) {
@@ -75,6 +76,7 @@ export default class StatsView extends AbstractView {
     contentPresenter.change(footerView, this._footerContainer);
     this._footerView = footerView;
   }
+  /** Вызывается в ответ на инициацию пользователем действия возврата. */
   onGoBack() {
   }
 }

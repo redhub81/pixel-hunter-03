@@ -9,7 +9,7 @@ class GreetingScreen {
     this._view = new GreetingView();
   }
   init() {
-    contentPresenter.change(this._view);
+    contentPresenter.crossfade(this._view);
     this._view.onContinue = () => {
       Application.showRules();
     };

@@ -1,10 +1,10 @@
-/** @module game/levels/game-three-view */
+/** @module game/levels/level-three-view */
 
 import gameConventions from '../../config/game-conventions';
 import {raiseEvent} from '../../helpers/event-helper';
 import contentPresenter from '../../content-presenter';
 import AbstractView from '../../abstract-view';
-import ProgressView from "../../views/progress-view";
+import ProgressView from '../../views/progress-view';
 import answerEncoder from '../../data/encoders/answer-encoder';
 import ImageViewModel from '../view-models/image-view-model';
 
@@ -13,7 +13,7 @@ const {LevelType, ImageType} = gameConventions;
 /*
  * Представление типа игры с тремя изображениями.
  */
-export default class GameThreeView extends AbstractView {
+export default class LevelThreeView extends AbstractView {
   /** Конструктор.
    * @param {object} model - модель данных.
    */
@@ -23,36 +23,13 @@ export default class GameThreeView extends AbstractView {
       ? [ImageType.PHOTO, ImageType.PAINTING]
       : [ImageType.PAINTING, ImageType.PHOTO];
   }
-  /**
-   * Ищет родительский элемент удовлетворяющий условию.
-   * @param {object} startChild - Начальный элемент.
-   * @param {object} lastParent - Конечный элемент.
-   * @param {function} predicate - Предикат, определяющий условие поиска.
-   * @return {object} - Найденный удовлетворяющий условию объект, иначе null.
-   */
-  static _findParent(startChild, lastParent, predicate) {
-    let element = startChild;
-    while (element && element !== lastParent) {
-      if (predicate(element)) {
-        return element;
-      }
-      element = element.parentElement;
-    }
-    return null;
-  }
-  static _getOptionTemplate(imageVM) {
-    return `\
-      <div class="game__option">
-        <img src="${imageVM.location}" alt="${imageVM.alt}" width="${imageVM.size.width}" height="${imageVM.size.height}">
-      </div>`;
-  }
   /** Геттер template создает разметку экрана. */
   get template() {
     return `\
       <div class="game">
         <p class="game__task">${this.model.level.description}</p>
         <form class="game__content  game__content--triple">
-          ${this.model.level.images.map((it, index) => GameThreeView._getOptionTemplate(new ImageViewModel(it, index))).join(`\n`)}
+          ${this.model.level.images.map((it, index) => LevelThreeView._getOptionTemplate(new ImageViewModel(it, index))).join(`\n`)}
         </form>
         <div class="stats"></div>
       </div>`;
@@ -64,7 +41,7 @@ export default class GameThreeView extends AbstractView {
     const gameContentElement = this._element.querySelector(`.game__content`);
     let mousedownOptionElement;
 
-    const findParentGameOption = (startChild, lastParent) => GameThreeView._findParent(startChild, lastParent, (element) =>
+    const findParentGameOption = (startChild, lastParent) => LevelThreeView._findParent(startChild, lastParent, (element) =>
       element.classList.contains(`game__option`));
 
     gameContentElement.addEventListener(`mousedown`, (evt) => {
@@ -97,7 +74,30 @@ export default class GameThreeView extends AbstractView {
     contentPresenter.change(progressView, this._statsContainer);
     this._progressView = progressView;
   }
-  /** Вызывается при переходе на следующий уровень. */
+  /** Вызывается при ответе пользователя на вопрос задания. */
   onAnswer() {
+  }
+  /**
+   * Ищет родительский элемент удовлетворяющий условию.
+   * @param {object} startChild - Начальный элемент.
+   * @param {object} lastParent - Конечный элемент.
+   * @param {function} predicate - Предикат, определяющий условие поиска.
+   * @return {object} - Найденный удовлетворяющий условию объект, иначе null.
+   */
+  static _findParent(startChild, lastParent, predicate) {
+    let element = startChild;
+    while (element && element !== lastParent) {
+      if (predicate(element)) {
+        return element;
+      }
+      element = element.parentElement;
+    }
+    return null;
+  }
+  static _getOptionTemplate(imageVM) {
+    return `\
+      <div class="game__option">
+        <img src="${imageVM.location}" alt="${imageVM.alt}" width="${imageVM.size.width}" height="${imageVM.size.height}">
+      </div>`;
   }
 }

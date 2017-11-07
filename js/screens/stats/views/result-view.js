@@ -4,18 +4,35 @@ import gameConventions from '../../../config/game-conventions';
 import gameSettings from '../../../config/game-settings';
 import contentPresenter from '../../../content-presenter';
 import AbstractView from '../../../abstract-view';
-import ProgressView from "../../../views/progress-view";
+import ProgressView from '../../../views/progress-view';
 
 const {ResultType, SpeedType} = gameConventions;
 const {AnswerScore, SpeedScore, AccuracyScore} = gameSettings;
 
 
 export default class ResultView extends AbstractView {
-  /** Конструктор.
+  /**
+   * Конструктор.
    * @param {object} model - модель данных.
    */
   constructor(model) {
     super(model);
+  }
+  /** Геттер template создает разметку экрана */
+  get template() {
+    const {result, number} = this.model;
+    return `\
+      ${result.resultType === ResultType.RIGHT
+    ? ResultView._getGameSuccessStatTemplate(number, result)
+    : ResultView._getGameFailedStatTemplate(number)}`;
+  }
+  bind() {
+    this._statsContainer = this.element.querySelector(`.stats-container`);
+  }
+  update() {
+    const progressView = new ProgressView(this._model.result.answers);
+    contentPresenter.change(progressView, this._statsContainer);
+    this._progressView = progressView;
   }
   static _getSpeedFastBonusTemplate(data) {
     return `\
@@ -78,21 +95,5 @@ export default class ResultView extends AbstractView {
           <td class="result__total  result__total--final">fail</td>
         </tr>
       </table>`;
-  }
-  /** Геттер template создает разметку экрана */
-  get template() {
-    const {result, number} = this.model;
-    return `\
-      ${result.resultType === ResultType.RIGHT
-    ? ResultView._getGameSuccessStatTemplate(number, result)
-    : ResultView._getGameFailedStatTemplate(number)}`;
-  }
-  bind() {
-    this._statsContainer = this.element.querySelector(`.stats-container`);
-  }
-  update() {
-    const progressView = new ProgressView(this._model.result.answers);
-    contentPresenter.change(progressView, this._statsContainer);
-    this._progressView = progressView;
   }
 }

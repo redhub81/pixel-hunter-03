@@ -1,10 +1,10 @@
-/** @module game/levels/game-two-view */
+/** @module game/levels/level-two-view */
 
 import gameConventions from '../../config/game-conventions';
 import contentPresenter from '../../content-presenter';
 import {raiseEvent} from '../../helpers/event-helper';
 import AbstractView from '../../abstract-view';
-import ProgressView from "../../views/progress-view";
+import ProgressView from '../../views/progress-view';
 import answerEncoder from '../../data/encoders/answer-encoder';
 import ImageViewModel from '../view-models/image-view-model';
 
@@ -13,17 +13,12 @@ const {ImageType} = gameConventions;
 /*
  * Представление типа игры с одним изображением.
  */
-export default class GameTwoView extends AbstractView {
+export default class LevelTwoView extends AbstractView {
   /** Конструктор.
    * @param {object} model - модель данных.
    */
   constructor(model) {
     super(model);
-  }
-  static _getOptionTemplate(imageVM) {
-    return `\
-      <img src="${imageVM.location}" alt="${imageVM.alt}" width="${imageVM.size.width}" height="${imageVM.size.height}">
-    `;
   }
   /** Геттер template создает разметку экрана. */
   get template() {
@@ -32,7 +27,7 @@ export default class GameTwoView extends AbstractView {
         <p class="game__task">${this.model.level.description}</p>
         <form class="game__content  game__content--wide">
           <div class="game__option">
-            ${GameTwoView._getOptionTemplate(new ImageViewModel(this.model.level.images[0]))}
+            ${LevelTwoView._getOptionTemplate(new ImageViewModel(this.model.level.images[0]))}
             <label class="game__answer  game__answer--photo">
               <input name="question1" type="radio" value="${ImageType.PHOTO}">
               <span>Фото</span>
@@ -67,7 +62,12 @@ export default class GameTwoView extends AbstractView {
     contentPresenter.change(progressView, this._statsContainer);
     this._progressView = progressView;
   }
-  /** Вызывается при переходе на следующий уровень. */
+  /** Вызывается при ответе пользователя на вопрос задания. */
   onAnswer() {
+  }
+  static _getOptionTemplate(imageVM) {
+    return `\
+      <img src="${imageVM.location}" alt="${imageVM.alt}" width="${imageVM.size.width}" height="${imageVM.size.height}">
+    `;
   }
 }

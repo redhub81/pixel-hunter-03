@@ -1,4 +1,4 @@
-/** @module game/game-model */
+/** @module logic/scoring */
 
 import gameSettings from '../config/game-settings';
 import {raiseEvent} from '../helpers/event-helper';
@@ -22,13 +22,6 @@ export default class GameModel {
       this._state.time = tick;
     });
   }
-  _updateState(stateData) {
-    this._state.update(stateData, false);
-    this._level = this._levels[this._state.levelNumber];
-  }
-  _completeGame() {
-    this._isComplete = true;
-  }
   get state() {
     return this._state;
   }
@@ -45,6 +38,13 @@ export default class GameModel {
       livesCount: this._state.livesCount,
       answers: this._state.answers.map((answer) => answer.resultCode),
     };
+  }
+  _updateState(stateData) {
+    this._state.update(stateData, false);
+    this._level = this._levels[this._state.levelNumber];
+  }
+  _completeGame() {
+    this._isComplete = true;
   }
   newGame(stateData = initialGameStateData) {
     this._timer.stop();
@@ -85,6 +85,9 @@ export default class GameModel {
   stopTimer() {
     this._timer.stop();
   }
+  /**
+   * Вызывается по истечении времени, отведенного на выполнение задания.
+   */
   onTimeout() {
   }
 }

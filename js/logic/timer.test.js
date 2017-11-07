@@ -30,7 +30,7 @@ describe(`Timer.tick() method:`, () => {
   it(`decreases ticks count by one on each invocation while ticks count greater than zero.`, () => {
     // Arrange
     const INITIAL_TICKS_COUNT = 10;
-    let timer = new Timer(INITIAL_TICKS_COUNT, () => {});
+    const timer = new Timer(INITIAL_TICKS_COUNT, () => {});
 
     // Act and assert
     let ticksCount = timer.ticksCount;
@@ -54,7 +54,7 @@ describe(`Timer.tick() method:`, () => {
     const ITERATIONS = 2;
     const INITIAL_TICKS_COUNT = 1;
     const expectedTicksCountValues = new Array(ITERATIONS).fill(0);
-    let timer = new Timer(INITIAL_TICKS_COUNT, () => {});
+    const timer = new Timer(INITIAL_TICKS_COUNT, () => {});
 
     // Act
     const ticksCountValues = new Array(ITERATIONS).fill(null).map(() => {
@@ -71,7 +71,7 @@ describe(`Timer.tick() method:`, () => {
     // Arrange
     const INITIAL_TICKS_COUNT = 1;
     let isCallbackInvoked = false;
-    let timer = new Timer(INITIAL_TICKS_COUNT, () => {
+    const timer = new Timer(INITIAL_TICKS_COUNT, () => {
       isCallbackInvoked = true;
     });
 

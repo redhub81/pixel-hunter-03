@@ -1,8 +1,8 @@
 /** @module logic/scoring.test */
 
 import assert from 'assert';
-import gameConventions from "../config/game-conventions";
-import gameSettings from "../config/game-settings";
+import gameConventions from '../config/game-conventions';
+import gameSettings from '../config/game-settings';
 import scoring from './scoring';
 
 const {ResultType, SpeedType, ScoreLimits} = gameConventions;
@@ -21,24 +21,22 @@ const expect = {
 };
 
 const getUserResponses = (count = TotalCount.QUESTIONS, resultType = ResultType.RIGHT, speed = SpeedType.NORMAL) =>
-  new Array(count)
-      .fill(null)
+  new Array(count).fill(null)
       .map(() => ({answerCode: 0, resultType, speed}));
 
 describe(`Game scoring:`, () => {
   it(`is failed when less than 10 responses.`, () => {
     // Arrange
     const LIVES_COUNT = TotalCount.LIVES;
-    const userResponsesCases = [];
-    for (let i = 1; i < 10; i++) {
-      userResponsesCases[i] = getUserResponses(i);
-    }
+    const userResponsesCases = new Array(9).fill(null)
+        .map((it, index) => getUserResponses(index + 1));
 
     // Act
-    const resultScores = [];
-    for (let i = 1; i < userResponsesCases.length; i++) {
-      resultScores[i] = scoring.getCompletionScore(userResponsesCases[i], LIVES_COUNT);
-    }
+    const resultScores = userResponsesCases
+        .reduce((result, it) => {
+          result.push(scoring.getCompletionScore(it, LIVES_COUNT));
+          return result;
+        }, []);
 
     // Assert
     resultScores.forEach((score, index) => assert.ok(expect.game.failed(score), `expected game failed: caseIndex = ${index}.`));

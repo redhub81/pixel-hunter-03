@@ -37,6 +37,10 @@ export default class RulesView extends AbstractView {
       </div>
       <div class="footer-container"></div>`;
   }
+  set playerName(value) {
+    this._playerNameInputElement.value = value;
+    this.updateRulesButton();
+  }
   /** Выполняет подписку на события. */
   bind() {
     this._headerContainer = this.element.querySelector(`.header-container`);
@@ -85,13 +89,10 @@ export default class RulesView extends AbstractView {
   focus() {
     this._playerNameInputElement.focus();
   }
-  set playerName(value) {
-    this._playerNameInputElement.value = value;
-    this.updateRulesButton();
-  }
   /** Вызывается в ответ на ввод данных пользователем. */
   onResponse() {
   }
+  /** Вызывается в ответ на инициацию пользователем выхода из игры. */
   onGoBack() {
   }
 }

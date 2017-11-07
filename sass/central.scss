@@ -12,3 +12,28 @@
   display: flex;
   min-height: 740px;
 }
+
+.central .crossfade {
+  position: absolute;
+}
+
+.central .crossfade.out {
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: opacity 1s ease-out, visibility 0s linear 1.0s;
+  -moz-transition: opacity 1s ease-out, visibility 0s linear 1.0s;
+  -o-transition: opacity 1s ease-out, visibility 0s linear 1.0s;
+  transition: opacity 1s ease-out, visibility 0s linear 1.0s;
+}
+
+.central .crossfade.init {
+  opacity: 0;
+}
+
+.central .crossfade.in {
+  opacity: 1;
+  -webkit-transition: opacity 1s ease-in;
+  -moz-transition: opacity 1s ease-in;
+  -o-transition: opacity 1s ease-in;
+  transition: opacity 1s ease-in;
+}
