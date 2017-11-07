@@ -31,19 +31,20 @@ const contentPresenter = {
     const container = mainContentElement;
     const children = [...container.childNodes];
     children.forEach((it) => {
-      contentPresenter._addClass(it, CssClass.CROSSFADE);
-      contentPresenter._addClass(it, CssClass.FADEOUT);
+      it.classList.add(CssClass.CROSSFADE);
+      it.classList.add(CssClass.FADEOUT);
     });
+
     const element = view.element;
-    contentPresenter._addClass(element, CssClass.CROSSFADE);
-    contentPresenter._removeClass(element, CssClass.FADEIN);
-    contentPresenter._addClass(element, CssClass.FADEINIT);
+    element.classList.add(CssClass.CROSSFADE);
+    element.classList.remove(CssClass.FADEIN);
+    element.classList.add(CssClass.FADEINIT);
 
     container.appendChild(view.element);
 
     setTimeout(() => {
-      contentPresenter._removeClass(element, CssClass.FADEINIT);
-      contentPresenter._addClass(element, CssClass.FADEIN);
+      element.classList.remove(CssClass.FADEINIT);
+      element.classList.add(CssClass.FADEIN);
     }, CROSSFADE_IN_DELAY);
   },
   /**
@@ -81,10 +82,10 @@ const contentPresenter = {
     element.classList.remove(cssClass);
   },
   _clearCrossfade: (element) => {
-    contentPresenter._removeClass(element, CssClass.CROSSFADE);
-    contentPresenter._removeClass(element, CssClass.FADEOUT);
-    contentPresenter._removeClass(element, CssClass.FADEINIT);
-    contentPresenter._removeClass(element, CssClass.FADEIN);
+    element.classList.remove(CssClass.CROSSFADE);
+    element.classList.remove(CssClass.FADEOUT);
+    element.classList.remove(CssClass.FADEINIT);
+    element.classList.remove(CssClass.FADEIN);
   }
 };
 
