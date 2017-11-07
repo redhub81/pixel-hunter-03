@@ -31,14 +31,12 @@ const contentPresenter = {
     const container = mainContentElement;
     const children = [...container.childNodes];
     children.forEach((it) => {
-      it.classList.add(CssClass.CROSSFADE);
-      it.classList.add(CssClass.FADEOUT);
+      it.classList.add(CssClass.CROSSFADE, CssClass.FADEOUT);
     });
 
     const element = view.element;
-    element.classList.add(CssClass.CROSSFADE);
     element.classList.remove(CssClass.FADEIN);
-    element.classList.add(CssClass.FADEINIT);
+    element.classList.add(CssClass.CROSSFADE, CssClass.FADEINIT);
 
     container.appendChild(view.element);
 
@@ -69,23 +67,8 @@ const contentPresenter = {
     const element = mainContentElement.querySelector(selector);
     callback(element);
   },
-  _addClass: (element, cssClass) => {
-    if (element.classList.contains(cssClass)) {
-      return;
-    }
-    element.classList.add(cssClass);
-  },
-  _removeClass: (element, cssClass) => {
-    if (!element.classList.contains(cssClass)) {
-      return;
-    }
-    element.classList.remove(cssClass);
-  },
   _clearCrossfade: (element) => {
-    element.classList.remove(CssClass.CROSSFADE);
-    element.classList.remove(CssClass.FADEOUT);
-    element.classList.remove(CssClass.FADEINIT);
-    element.classList.remove(CssClass.FADEIN);
+    element.classList.remove(CssClass.CROSSFADE, CssClass.FADEOUT, CssClass.FADEINIT, CssClass.FADEIN);
   }
 };
 
